@@ -184,24 +184,24 @@ import { AGE_BANDS, DOMICILES, OCCUPATIONS, CURRENT_BRANDS } from '../data/regis
     padding: 0 var(--space-4);
     font-family: var(--font-body);
     font-size: 0.95rem;
-    color: var(--text-main);
+    color: var(--text-input);
     transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
   }
 
   .form-input::placeholder {
-    color: var(--text-muted);
-    opacity: 0.65;
+    color: #6e6258;
+    opacity: 0.8;
   }
 
   .form-input:focus, .form-select:focus {
-    border-color: var(--color-gold-600);
-    box-shadow: 0 0 0 3px rgba(196, 154, 69, 0.25);
+    border-color: var(--color-gold-500);
+    box-shadow: 0 0 0 3px rgba(196, 154, 69, 0.3);
     outline: none;
   }
 
   .form-select option {
-    background: var(--surface-card);
-    color: var(--text-main);
+    background: #ffffff;
+    color: #2b211b;
   }
 
   .checkbox-group {
@@ -304,9 +304,8 @@ import { AGE_BANDS, DOMICILES, OCCUPATIONS, CURRENT_BRANDS } from '../data/regis
   .btn-primary {
     width: 100%;
     min-height: 48px;
-    background: linear-gradient(135deg, #c49a45 0%, #9e7523 100%);
-    color: #ffffff;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    background: linear-gradient(135deg, var(--color-gold-500) 0%, #a87e2b 100%);
+    color: var(--color-brown-950);
     font-family: var(--font-body);
     font-size: 1rem;
     font-weight: 700;
@@ -318,7 +317,7 @@ import { AGE_BANDS, DOMICILES, OCCUPATIONS, CURRENT_BRANDS } from '../data/regis
     gap: var(--space-2);
     cursor: pointer;
     margin-top: var(--space-2);
-    box-shadow: 0 4px 12px rgba(196, 154, 69, 0.3);
+    box-shadow: 0 4px 14px rgba(196, 154, 69, 0.35);
     transition: transform 0.15s ease, filter 0.15s ease, box-shadow 0.15s ease;
   }
 

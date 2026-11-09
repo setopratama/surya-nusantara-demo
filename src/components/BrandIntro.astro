@@ -119,9 +119,8 @@
   .btn-primary {
     width: 100%;
     min-height: 48px;
-    background: linear-gradient(135deg, #c49a45 0%, #9e7523 100%);
-    color: #ffffff;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    background: linear-gradient(135deg, var(--color-gold-500) 0%, #a87e2b 100%);
+    color: var(--color-brown-950);
     font-family: var(--font-body);
     font-size: 1rem;
     font-weight: 700;
@@ -132,7 +131,7 @@
     justify-content: center;
     gap: var(--space-2);
     cursor: pointer;
-    box-shadow: 0 4px 12px rgba(196, 154, 69, 0.3);
+    box-shadow: 0 4px 14px rgba(196, 154, 69, 0.35);
     transition: transform 0.15s ease, filter 0.15s ease, opacity 0.2s ease, box-shadow 0.15s ease;
   }
 
@@ -146,17 +145,12 @@
   }
 
   .btn-primary:disabled {
-    opacity: 0.55;
+    opacity: 0.45;
     cursor: not-allowed;
-    background: #d8c8ab;
-    color: #7a6e5d;
-    box-shadow: none;
-    text-shadow: none;
-  }
-
-  [data-theme="dark"] .btn-primary:disabled {
     background: #482a1b;
     color: #9c8574;
+    box-shadow: none;
+    text-shadow: none;
   }
 
   @keyframes fadeIn {

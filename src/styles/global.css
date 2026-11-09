@@ -2,53 +2,68 @@
 
 :root {
   /* =========================================================
-     LIGHT / CREAM THEME (DEFAULT)
-     High contrast, bright, warm Nusantara Craftsmanship
+     MODERN NUSANTARA CRAFTSMANSHIP DESIGN TOKENS
+     Source: DESIGN.md & 5. Brief Games - Kuis Dedikasi Di Balik Rasa
      ========================================================= */
-  --bg-app: #f4eee2;
-  --bg-gradient: radial-gradient(circle at 50% 15%, #faf6ee 0%, #ebe2d0 100%);
-  --surface-card: #ffffff;
-  --surface-subtle: #f9f5ed;
-  --surface-input: #ffffff;
-  --surface-option: #ffffff;
-  --surface-option-hover: #fcf6e9;
 
-  --text-main: #2b211b;
-  --text-muted: #5e5147;
-  --text-display: #382014;
-  --text-accent: #705321;
-
-  --border-card: #c49a45;
-  --border-subtle: #d8c8ab;
-  --border-input: #b88d3b;
-  --card-shadow: 0 10px 30px rgba(56, 32, 20, 0.12), 0 2px 6px rgba(56, 32, 20, 0.06);
-
-  --header-bg: rgba(250, 246, 238, 0.95);
-  --header-border: rgba(196, 154, 69, 0.4);
-  --header-text: #382014;
-  --header-tagline: #705321;
-
-  --footer-bg: rgba(244, 238, 226, 0.95);
-  --footer-border: rgba(196, 154, 69, 0.3);
-
-  /* Shared Brand Accents */
+  /* Palette Tokens from DESIGN.md Section 3.1 */
+  --color-brown-950: #28170f;
+  --color-brown-900: #382014;
+  --color-brown-800: #50371f;
+  --color-brown-700: #705321;
   --color-gold-500: #c49a45;
   --color-gold-600: #a87e2b;
   --color-gold-300: #e2c47b;
+  --color-cream-100: #f1ebdd;
+  --color-cream-50: #faf7f0;
+  --color-ink-900: #2b211b;
+  --color-ink-600: #6e6258;
   --color-accent-terracotta: #a94f3c;
-  --color-success: #2e6945;
-  --color-success-bg: #eaf5ed;
-  --color-success-border: #48bb78;
-  --color-error: #b93829;
-  --color-error-bg: #fdeeed;
-  --color-error-border: #f56565;
+  --color-success: #3f7657;
+  --color-error: #a7473b;
+  --color-border-light: #ded5c5;
+  --color-border-dark: #6c563a;
+
+  /* Semantic UI Surfaces & Colors */
+  --bg-app: #1e110a;
+  --bg-gradient: radial-gradient(circle at 50% 15%, #3d2315 0%, #1a0e08 85%);
+  
+  --surface-card: #341e12;
+  --surface-subtle: #422818;
+  --surface-input: #faf7f0;
+  --surface-option: #3d2315;
+  --surface-option-hover: #4e2e1c;
+
+  --text-main: #faf7f0;
+  --text-muted: #e4d7c5;
+  --text-display: #e2c47b;
+  --text-accent: #f5dfa8;
+  --text-input: #2b211b;
+
+  --border-card: #c49a45;
+  --border-subtle: rgba(196, 154, 69, 0.35);
+  --border-input: #c49a45;
+  --card-shadow: 0 12px 40px rgba(0, 0, 0, 0.65), 0 0 20px rgba(196, 154, 69, 0.12);
+
+  --header-bg: rgba(40, 23, 15, 0.92);
+  --header-border: rgba(196, 154, 69, 0.35);
+  --header-text: #e2c47b;
+  --header-tagline: #c49a45;
+
+  --footer-bg: rgba(26, 14, 8, 0.95);
+  --footer-border: rgba(196, 154, 69, 0.25);
+
+  --color-success-bg: rgba(63, 118, 87, 0.35);
+  --color-success-border: #6ee7b7;
+  --color-error-bg: rgba(167, 71, 59, 0.35);
+  --color-error-border: #fca5a5;
 
   /* Typography */
   --font-display: 'Roboto Condensed', 'Arial Narrow', Arial, sans-serif;
   --font-body: 'Roboto', 'Helvetica Neue', Arial, sans-serif;
   --font-mono: 'IBM Plex Mono', 'SFMono-Regular', Consolas, monospace;
 
-  /* Spacing Scale */
+  /* Spacing Scale (4px base) */
   --space-1: 4px;
   --space-2: 8px;
   --space-3: 12px;
@@ -60,48 +75,11 @@
   --space-12: 48px;
   --space-16: 64px;
 
-  /* Sizing & Borders */
+  /* Sizing & Radius */
   --content-max-width: 560px;
   --radius-card: 16px;
   --radius-button: 10px;
   --radius-input: 10px;
-}
-
-/* =========================================================
-   DARK THEME (ENHANCED HIGH-CONTRAST)
-   Radiant gold, elevated cards, readable bright typography
-   ========================================================= */
-[data-theme="dark"] {
-  --bg-app: #180d07;
-  --bg-gradient: radial-gradient(circle at 50% 15%, #351c10 0%, #160b05 85%);
-  --surface-card: #2c170d;
-  --surface-subtle: #3a2013;
-  --surface-input: #381e11;
-  --surface-option: #341b0e;
-  --surface-option-hover: #482816;
-
-  --text-main: #fdfaf5;
-  --text-muted: #e4d7c5;
-  --text-display: #f5dfa8;
-  --text-accent: #ffd885;
-
-  --border-card: #d4af37;
-  --border-subtle: #825f2d;
-  --border-input: #d4af37;
-  --card-shadow: 0 12px 40px rgba(0, 0, 0, 0.75), 0 0 20px rgba(212, 175, 55, 0.18);
-
-  --header-bg: rgba(24, 13, 7, 0.92);
-  --header-border: rgba(212, 175, 55, 0.4);
-  --header-text: #f5dfa8;
-  --header-tagline: #ffd885;
-
-  --footer-bg: rgba(18, 9, 4, 0.95);
-  --footer-border: rgba(212, 175, 55, 0.3);
-
-  --color-success-bg: rgba(46, 105, 69, 0.35);
-  --color-success-border: #6ee7b7;
-  --color-error-bg: rgba(185, 56, 41, 0.35);
-  --color-error-border: #fca5a5;
 }
 
 /* Reset & Base Styles */
@@ -121,7 +99,6 @@ html, body {
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  transition: background-color 0.25s ease, color 0.25s ease;
 }
 
 /* Tabular numbers for countdown and scores */
@@ -132,7 +109,7 @@ html, body {
 
 /* Accessibility Focus Ring */
 :focus-visible {
-  outline: 2px solid var(--color-gold-500);
+  outline: 2px solid var(--color-gold-300);
   outline-offset: 2px;
 }
 
