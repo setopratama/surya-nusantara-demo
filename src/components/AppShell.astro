@@ -1,4 +1,6 @@
 ---
+import '../styles/global.css';
+
 interface Props {
   title?: string;
 }
@@ -14,6 +16,12 @@ const { title = 'Kuis Dedikasi Di Balik Rasa — Surya Nusantara' } = Astro.prop
     <meta name="description" content="Kuis Dedikasi Di Balik Rasa - Pengalaman interaktif Surya Nusantara" />
     <title>{title}</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@600;700&family=Roboto+Condensed:wght@600;700&family=Roboto:wght@400;500;700&display=swap"
+    />
     <script is:inline>
       // Initialize theme preference immediately to prevent FOUC
       (function() {
