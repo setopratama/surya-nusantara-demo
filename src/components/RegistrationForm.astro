@@ -103,7 +103,7 @@ import { AGE_BANDS, DOMICILES, OCCUPATIONS, CURRENT_BRANDS } from '../data/regis
         <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
       </svg>
       <span>
-        Data di atas hanya digunakan untuk keperluan simulasi kuis interaktif demo ini dan tidak disimpan secara permanen di server luar.
+        Data di atas hanya digunakan untuk simulasi kuis interaktif demo ini dan tidak disimpan di server luar.
       </span>
     </div>
 
@@ -119,18 +119,18 @@ import { AGE_BANDS, DOMICILES, OCCUPATIONS, CURRENT_BRANDS } from '../data/regis
 
 <style>
   .stage-card {
-    background: rgba(40, 23, 15, 0.95);
-    border: 1px solid rgba(196, 154, 69, 0.3);
+    background: var(--surface-card);
+    border: 1.5px solid var(--border-card);
     border-radius: var(--radius-card);
     padding: var(--space-6);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    box-shadow: var(--card-shadow);
     animation: fadeIn 0.3s ease;
   }
 
   .step-badge {
     font-size: 0.75rem;
-    font-weight: 600;
-    color: var(--color-gold-300);
+    font-weight: 700;
+    color: var(--text-accent);
     letter-spacing: 0.08em;
     text-transform: uppercase;
     margin-bottom: var(--space-2);
@@ -138,16 +138,17 @@ import { AGE_BANDS, DOMICILES, OCCUPATIONS, CURRENT_BRANDS } from '../data/regis
 
   .title-display {
     font-family: var(--font-display);
-    font-size: 1.75rem;
-    color: var(--color-gold-300);
+    font-size: 1.85rem;
+    color: var(--text-display);
     margin-bottom: var(--space-2);
     line-height: 1.2;
+    letter-spacing: -0.01em;
   }
 
   .subtitle-text {
-    font-size: 0.9rem;
-    color: var(--color-cream-100);
-    line-height: 1.5;
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    line-height: 1.55;
     margin-bottom: var(--space-5);
   }
 
@@ -160,42 +161,47 @@ import { AGE_BANDS, DOMICILES, OCCUPATIONS, CURRENT_BRANDS } from '../data/regis
   .form-group {
     display: flex;
     flex-direction: column;
-    gap: var(--space-1);
+    gap: 6px;
     text-align: left;
   }
 
   .form-label {
     font-size: 0.85rem;
-    font-weight: 600;
-    color: var(--color-cream-50);
+    font-weight: 700;
+    color: var(--text-main);
   }
 
   .required-mark {
-    color: #ff8a80;
+    color: var(--color-accent-terracotta);
   }
 
   .form-input, .form-select {
     width: 100%;
     min-height: 48px;
-    background: rgba(56, 32, 20, 0.8);
-    border: 1px solid rgba(196, 154, 69, 0.35);
+    background: var(--surface-input);
+    border: 1.5px solid var(--border-input);
     border-radius: var(--radius-input);
     padding: 0 var(--space-4);
     font-family: var(--font-body);
     font-size: 0.95rem;
-    color: var(--color-cream-50);
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    color: var(--text-main);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+  }
+
+  .form-input::placeholder {
+    color: var(--text-muted);
+    opacity: 0.65;
   }
 
   .form-input:focus, .form-select:focus {
-    border-color: var(--color-gold-500);
-    box-shadow: 0 0 0 2px rgba(196, 154, 69, 0.25);
+    border-color: var(--color-gold-600);
+    box-shadow: 0 0 0 3px rgba(196, 154, 69, 0.25);
     outline: none;
   }
 
   .form-select option {
-    background: var(--color-brown-900);
-    color: var(--color-cream-50);
+    background: var(--surface-card);
+    color: var(--text-main);
   }
 
   .checkbox-group {
@@ -207,10 +213,15 @@ import { AGE_BANDS, DOMICILES, OCCUPATIONS, CURRENT_BRANDS } from '../data/regis
     align-items: flex-start;
     gap: var(--space-3);
     cursor: pointer;
-    background: rgba(0, 0, 0, 0.25);
-    border: 1px solid rgba(196, 154, 69, 0.2);
+    background: var(--surface-subtle);
+    border: 1.5px solid var(--border-subtle);
     border-radius: var(--radius-input);
     padding: var(--space-3);
+    transition: border-color 0.2s ease;
+  }
+
+  .checkbox-label:hover {
+    border-color: var(--color-gold-500);
   }
 
   .checkbox-label input[type="checkbox"] {
@@ -224,14 +235,17 @@ import { AGE_BANDS, DOMICILES, OCCUPATIONS, CURRENT_BRANDS } from '../data/regis
     height: 20px;
     border-radius: 4px;
     border: 2px solid var(--color-gold-500);
+    background: var(--surface-input);
     margin-top: 2px;
     flex-shrink: 0;
     display: inline-block;
     position: relative;
+    transition: all 0.2s ease;
   }
 
   .checkbox-label input[type="checkbox"]:checked + .custom-checkbox {
     background: var(--color-gold-500);
+    border-color: var(--color-gold-600);
   }
 
   .checkbox-label input[type="checkbox"]:checked + .custom-checkbox::after {
@@ -241,21 +255,31 @@ import { AGE_BANDS, DOMICILES, OCCUPATIONS, CURRENT_BRANDS } from '../data/regis
     left: 6px;
     width: 4px;
     height: 9px;
-    border: solid var(--color-brown-950);
+    border: solid #ffffff;
     border-width: 0 2px 2px 0;
     transform: rotate(45deg);
   }
 
+  .checkbox-label input[type="checkbox"]:focus-visible + .custom-checkbox {
+    outline: 2px solid var(--color-gold-500);
+    outline-offset: 2px;
+  }
+
   .checkbox-text {
     font-size: 0.85rem;
-    color: var(--color-cream-100);
-    line-height: 1.4;
+    color: var(--text-main);
+    line-height: 1.45;
   }
 
   .field-error {
-    color: #ff8a80;
+    color: var(--color-error);
     font-size: 0.8rem;
+    font-weight: 600;
     margin-top: 2px;
+    background: var(--color-error-bg);
+    border: 1px solid var(--color-error-border);
+    padding: 4px 8px;
+    border-radius: 6px;
   }
 
   .privacy-note {
@@ -263,25 +287,26 @@ import { AGE_BANDS, DOMICILES, OCCUPATIONS, CURRENT_BRANDS } from '../data/regis
     align-items: flex-start;
     gap: var(--space-2);
     font-size: 0.75rem;
-    color: var(--color-cream-100);
-    opacity: 0.8;
-    background: rgba(0, 0, 0, 0.2);
+    color: var(--text-muted);
+    background: var(--surface-subtle);
+    border: 1px solid var(--border-subtle);
     padding: var(--space-3);
     border-radius: var(--radius-input);
-    line-height: 1.35;
+    line-height: 1.4;
   }
 
   .privacy-note svg {
     color: var(--color-gold-500);
     flex-shrink: 0;
-    margin-top: 1px;
+    margin-top: 2px;
   }
 
   .btn-primary {
     width: 100%;
     min-height: 48px;
-    background: linear-gradient(135deg, var(--color-gold-500) 0%, #a87e2b 100%);
-    color: var(--color-brown-950);
+    background: linear-gradient(135deg, #c49a45 0%, #9e7523 100%);
+    color: #ffffff;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
     font-family: var(--font-body);
     font-size: 1rem;
     font-weight: 700;
@@ -293,11 +318,13 @@ import { AGE_BANDS, DOMICILES, OCCUPATIONS, CURRENT_BRANDS } from '../data/regis
     gap: var(--space-2);
     cursor: pointer;
     margin-top: var(--space-2);
-    transition: transform 0.15s ease, filter 0.15s ease;
+    box-shadow: 0 4px 12px rgba(196, 154, 69, 0.3);
+    transition: transform 0.15s ease, filter 0.15s ease, box-shadow 0.15s ease;
   }
 
   .btn-primary:hover {
-    filter: brightness(1.1);
+    filter: brightness(1.08);
+    box-shadow: 0 6px 16px rgba(196, 154, 69, 0.4);
   }
 
   .btn-primary:active {

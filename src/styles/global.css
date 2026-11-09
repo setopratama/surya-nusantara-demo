@@ -1,29 +1,54 @@
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@600;700&family=Roboto+Condensed:wght@600;700&family=Roboto:wght@400;500;700&display=swap');
 
 :root {
-  /* Color Palette - Modern Nusantara Craftsmanship */
-  --color-brown-950: #28170f;
-  --color-brown-900: #382014;
-  --color-brown-800: #50371f;
-  --color-brown-700: #705321;
+  /* =========================================================
+     LIGHT / CREAM THEME (DEFAULT)
+     High contrast, bright, warm Nusantara Craftsmanship
+     ========================================================= */
+  --bg-app: #f4eee2;
+  --bg-gradient: radial-gradient(circle at 50% 15%, #faf6ee 0%, #ebe2d0 100%);
+  --surface-card: #ffffff;
+  --surface-subtle: #f9f5ed;
+  --surface-input: #ffffff;
+  --surface-option: #ffffff;
+  --surface-option-hover: #fcf6e9;
+
+  --text-main: #2b211b;
+  --text-muted: #5e5147;
+  --text-display: #382014;
+  --text-accent: #705321;
+
+  --border-card: #c49a45;
+  --border-subtle: #d8c8ab;
+  --border-input: #b88d3b;
+  --card-shadow: 0 10px 30px rgba(56, 32, 20, 0.12), 0 2px 6px rgba(56, 32, 20, 0.06);
+
+  --header-bg: rgba(250, 246, 238, 0.95);
+  --header-border: rgba(196, 154, 69, 0.4);
+  --header-text: #382014;
+  --header-tagline: #705321;
+
+  --footer-bg: rgba(244, 238, 226, 0.95);
+  --footer-border: rgba(196, 154, 69, 0.3);
+
+  /* Shared Brand Accents */
   --color-gold-500: #c49a45;
+  --color-gold-600: #a87e2b;
   --color-gold-300: #e2c47b;
-  --color-cream-100: #f1ebdd;
-  --color-cream-50: #faf7f0;
-  --color-ink-900: #2b211b;
-  --color-ink-600: #6e6258;
   --color-accent-terracotta: #a94f3c;
-  --color-success: #3f7657;
-  --color-error: #a7473b;
-  --color-border-light: #ded5c5;
-  --color-border-dark: #6c563a;
+  --color-success: #2e6945;
+  --color-success-bg: #eaf5ed;
+  --color-success-border: #48bb78;
+  --color-error: #b93829;
+  --color-error-bg: #fdeeed;
+  --color-error-border: #f56565;
 
   /* Typography */
   --font-display: 'Roboto Condensed', 'Arial Narrow', Arial, sans-serif;
   --font-body: 'Roboto', 'Helvetica Neue', Arial, sans-serif;
   --font-mono: 'IBM Plex Mono', 'SFMono-Regular', Consolas, monospace;
 
-  /* Spacing */
+  /* Spacing Scale */
   --space-1: 4px;
   --space-2: 8px;
   --space-3: 12px;
@@ -37,9 +62,46 @@
 
   /* Sizing & Borders */
   --content-max-width: 560px;
-  --radius-card: 14px;
+  --radius-card: 16px;
   --radius-button: 10px;
   --radius-input: 10px;
+}
+
+/* =========================================================
+   DARK THEME (ENHANCED HIGH-CONTRAST)
+   Radiant gold, elevated cards, readable bright typography
+   ========================================================= */
+[data-theme="dark"] {
+  --bg-app: #180d07;
+  --bg-gradient: radial-gradient(circle at 50% 15%, #351c10 0%, #160b05 85%);
+  --surface-card: #2c170d;
+  --surface-subtle: #3a2013;
+  --surface-input: #381e11;
+  --surface-option: #341b0e;
+  --surface-option-hover: #482816;
+
+  --text-main: #fdfaf5;
+  --text-muted: #e4d7c5;
+  --text-display: #f5dfa8;
+  --text-accent: #ffd885;
+
+  --border-card: #d4af37;
+  --border-subtle: #825f2d;
+  --border-input: #d4af37;
+  --card-shadow: 0 12px 40px rgba(0, 0, 0, 0.75), 0 0 20px rgba(212, 175, 55, 0.18);
+
+  --header-bg: rgba(24, 13, 7, 0.92);
+  --header-border: rgba(212, 175, 55, 0.4);
+  --header-text: #f5dfa8;
+  --header-tagline: #ffd885;
+
+  --footer-bg: rgba(18, 9, 4, 0.95);
+  --footer-border: rgba(212, 175, 55, 0.3);
+
+  --color-success-bg: rgba(46, 105, 69, 0.35);
+  --color-success-border: #6ee7b7;
+  --color-error-bg: rgba(185, 56, 41, 0.35);
+  --color-error-border: #fca5a5;
 }
 
 /* Reset & Base Styles */
@@ -51,13 +113,15 @@
 
 html, body {
   min-height: 100%;
-  background-color: var(--color-brown-950);
-  color: var(--color-cream-50);
+  background-color: var(--bg-app);
+  background-image: var(--bg-gradient);
+  color: var(--text-main);
   font-family: var(--font-body);
   font-size: 16px;
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.25s ease, color 0.25s ease;
 }
 
 /* Tabular numbers for countdown and scores */
@@ -68,7 +132,7 @@ html, body {
 
 /* Accessibility Focus Ring */
 :focus-visible {
-  outline: 2px solid var(--color-gold-300);
+  outline: 2px solid var(--color-gold-500);
   outline-offset: 2px;
 }
 

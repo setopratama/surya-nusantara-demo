@@ -74,11 +74,11 @@
 
 <style>
   .stage-card {
-    background: rgba(40, 23, 15, 0.95);
-    border: 1px solid rgba(196, 154, 69, 0.3);
+    background: var(--surface-card);
+    border: 1.5px solid var(--border-card);
     border-radius: var(--radius-card);
     padding: var(--space-6);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    box-shadow: var(--card-shadow);
     animation: fadeIn 0.3s ease;
   }
 
@@ -87,10 +87,10 @@
     align-items: center;
     gap: var(--space-2);
     font-size: 0.75rem;
-    font-weight: 600;
-    color: var(--color-gold-300);
-    background: rgba(196, 154, 69, 0.15);
-    border: 1px solid rgba(196, 154, 69, 0.3);
+    font-weight: 700;
+    color: var(--text-accent);
+    background: var(--surface-subtle);
+    border: 1px solid var(--border-subtle);
     padding: var(--space-1) var(--space-3);
     border-radius: 9999px;
     margin-bottom: var(--space-3);
@@ -98,29 +98,31 @@
 
   .title-display {
     font-family: var(--font-display);
-    font-size: 1.75rem;
-    color: var(--color-gold-300);
+    font-size: 1.85rem;
+    color: var(--text-display);
     margin-bottom: var(--space-2);
     line-height: 1.2;
+    letter-spacing: -0.01em;
   }
 
   .subtitle-text {
     font-size: 0.95rem;
-    color: var(--color-cream-100);
-    line-height: 1.5;
+    color: var(--text-muted);
+    line-height: 1.55;
   }
 
   .prompt-box {
     margin: var(--space-5) 0;
-    background: rgba(0, 0, 0, 0.3);
-    border: 1px solid rgba(196, 154, 69, 0.2);
+    background: var(--surface-subtle);
+    border: 1px solid var(--border-subtle);
     border-radius: var(--radius-input);
     padding: var(--space-4);
   }
 
   .question-label {
     font-size: 0.95rem;
-    color: var(--color-cream-50);
+    color: var(--text-main);
+    font-weight: 500;
     margin-bottom: var(--space-4);
   }
 
@@ -135,8 +137,8 @@
     align-items: center;
     gap: var(--space-3);
     padding: var(--space-3) var(--space-4);
-    background: rgba(56, 32, 20, 0.6);
-    border: 1px solid rgba(196, 154, 69, 0.25);
+    background: var(--surface-card);
+    border: 1.5px solid var(--border-subtle);
     border-radius: var(--radius-input);
     cursor: pointer;
     transition: all 0.2s ease;
@@ -144,7 +146,8 @@
 
   .option-label:hover {
     border-color: var(--color-gold-500);
-    background: rgba(80, 55, 31, 0.6);
+    background: var(--surface-option-hover);
+    transform: translateY(-1px);
   }
 
   .option-label input[type="radio"] {
@@ -161,6 +164,11 @@
     display: inline-block;
     position: relative;
     flex-shrink: 0;
+    background: var(--surface-card);
+  }
+
+  .option-label input[type="radio"]:checked + .custom-radio {
+    border-color: var(--color-gold-600);
   }
 
   .option-label input[type="radio"]:checked + .custom-radio::after {
@@ -170,32 +178,38 @@
     left: 3px;
     width: 10px;
     height: 10px;
-    background: var(--color-gold-300);
+    background: var(--color-gold-500);
     border-radius: 50%;
   }
 
   .option-label input[type="radio"]:focus-visible + .custom-radio {
-    outline: 2px solid var(--color-gold-300);
+    outline: 2px solid var(--color-gold-500);
     outline-offset: 2px;
   }
 
   .option-text {
     font-size: 0.95rem;
-    color: var(--color-cream-50);
-    font-weight: 500;
+    color: var(--text-main);
+    font-weight: 600;
   }
 
   .field-error {
-    color: #ff8a80;
+    color: var(--color-error);
     font-size: 0.85rem;
+    font-weight: 600;
     margin-bottom: var(--space-3);
+    background: var(--color-error-bg);
+    border: 1px solid var(--color-error-border);
+    padding: var(--space-2) var(--space-3);
+    border-radius: var(--radius-input);
   }
 
   .btn-primary {
     width: 100%;
     min-height: 48px;
-    background: linear-gradient(135deg, var(--color-gold-500) 0%, #a87e2b 100%);
-    color: var(--color-brown-950);
+    background: linear-gradient(135deg, #c49a45 0%, #9e7523 100%);
+    color: #ffffff;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
     font-family: var(--font-body);
     font-size: 1rem;
     font-weight: 700;
@@ -206,11 +220,13 @@
     justify-content: center;
     gap: var(--space-2);
     cursor: pointer;
-    transition: transform 0.15s ease, filter 0.15s ease;
+    box-shadow: 0 4px 12px rgba(196, 154, 69, 0.3);
+    transition: transform 0.15s ease, filter 0.15s ease, box-shadow 0.15s ease;
   }
 
   .btn-primary:hover {
-    filter: brightness(1.1);
+    filter: brightness(1.08);
+    box-shadow: 0 6px 16px rgba(196, 154, 69, 0.4);
   }
 
   .btn-primary:active {
@@ -220,19 +236,20 @@
   .btn-secondary {
     width: 100%;
     min-height: 48px;
-    background: transparent;
-    color: var(--color-cream-100);
+    background: var(--surface-subtle);
+    color: var(--text-main);
     font-family: var(--font-body);
     font-size: 1rem;
     font-weight: 600;
-    border: 1px solid var(--color-gold-500);
+    border: 1.5px solid var(--border-card);
     border-radius: var(--radius-button);
     cursor: pointer;
-    transition: background 0.2s ease;
+    transition: background 0.2s ease, transform 0.15s ease;
   }
 
   .btn-secondary:hover {
-    background: rgba(196, 154, 69, 0.15);
+    background: var(--surface-option-hover);
+    transform: translateY(-1px);
   }
 
   .denied-icon {
@@ -243,7 +260,7 @@
   }
 
   .error-text {
-    color: #ff8a80;
+    color: var(--color-error);
   }
 
   .text-center {
