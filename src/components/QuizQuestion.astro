@@ -1,0 +1,341 @@
+---
+---
+
+<section id="stage-quiz" class="stage-card" style="display: none;" aria-labelledby="quiz-question-text">
+  <!-- Top Bar -->
+  <div class="quiz-top-bar">
+    <div class="quiz-progress-info">
+      <span class="quiz-step-label">
+        Pertanyaan <strong id="quiz-current-num" class="tabular-nums">1</strong> / 10
+      </span>
+      <div
+        class="progress-bar-track"
+        role="progressbar"
+        aria-valuenow="1"
+        aria-valuemin="1"
+        aria-valuemax="10"
+        aria-label="Progres Kuis"
+      >
+        <div id="quiz-progress-fill" class="progress-bar-fill" style="width: 10%;"></div>
+      </div>
+    </div>
+
+    <div id="quiz-timer-container" class="timer-badge">
+      <div id="timer-reading-indicator" class="timer-reading-badge" style="display: none;" aria-live="polite">
+        <span>Baca:</span>
+        <strong id="reading-countdown" class="tabular-nums">3s</strong>
+      </div>
+      <div id="timer-active-indicator" class="timer-active-badge" aria-live="off">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <circle cx="12" cy="12" r="10"></circle>
+          <polyline points="12 6 12 12 16 14"></polyline>
+        </svg>
+        <strong id="answer-countdown" class="tabular-nums">10s</strong>
+      </div>
+    </div>
+  </div>
+
+  <!-- Question -->
+  <div class="question-container">
+    <div id="brand-pool-tag" class="pool-tag" style="display: none;">Pertanyaan Surya Nusantara</div>
+    <h2 id="quiz-question-text" class="question-title">Memuat pertanyaan...</h2>
+  </div>
+
+  <!-- Answer Options -->
+  <div id="quiz-options-list" class="options-container" role="radiogroup" aria-label="Pilihan Jawaban">
+    <!-- Rendered dynamically -->
+  </div>
+
+  <!-- Feedback Panel -->
+  <div id="quiz-feedback-panel" class="feedback-panel" style="display: none;" role="region" aria-live="assertive" aria-atomic="true">
+    <div class="feedback-header">
+      <div id="feedback-icon" class="feedback-icon-box"></div>
+      <div class="feedback-title-box">
+        <h3 id="feedback-title" class="feedback-title"></h3>
+        <p id="feedback-score-gain" class="feedback-score-gain"></p>
+      </div>
+    </div>
+    <div id="feedback-explanation" class="feedback-explanation" style="display: none;"></div>
+    <button id="btn-next-question" class="btn-primary" type="button">
+      <span id="btn-next-label">Lanjut ke Pertanyaan Berikutnya</span>
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <line x1="5" y1="12" x2="19" y2="12"></line>
+        <polyline points="12 5 19 12 12 19"></polyline>
+      </svg>
+    </button>
+  </div>
+</section>
+
+<style>
+  .stage-card {
+    background: rgba(40, 23, 15, 0.95);
+    border: 1px solid rgba(196, 154, 69, 0.3);
+    border-radius: var(--radius-card);
+    padding: var(--space-5) var(--space-4);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    animation: fadeIn 0.3s ease;
+  }
+
+  /* ── Top bar ── */
+  .quiz-top-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+    margin-bottom: var(--space-4);
+    padding-bottom: var(--space-3);
+    border-bottom: 1px solid rgba(196, 154, 69, 0.2);
+  }
+
+  .quiz-progress-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex: 1;
+  }
+
+  .quiz-step-label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--color-gold-300);
+  }
+
+  .progress-bar-track {
+    width: 100%;
+    height: 6px;
+    background: rgba(56, 32, 20, 0.9);
+    border-radius: 9999px;
+    overflow: hidden;
+    border: 1px solid rgba(196, 154, 69, 0.3);
+  }
+
+  .progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--color-gold-500) 0%, #ffdf9e 100%);
+    border-radius: 9999px;
+    transition: width 0.3s ease;
+  }
+
+  /* ── Timer ── */
+  .timer-badge { flex-shrink: 0; }
+
+  .timer-reading-badge,
+  .timer-active-badge {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.85rem;
+    border-radius: 9999px;
+    padding: 4px 12px;
+    font-weight: 600;
+  }
+
+  .timer-reading-badge {
+    background: rgba(196, 154, 69, 0.25);
+    color: var(--color-gold-300);
+    border: 1px solid var(--color-gold-500);
+    animation: pulse 1s infinite alternate;
+  }
+
+  .timer-active-badge {
+    background: rgba(28, 15, 9, 0.9);
+    color: var(--color-gold-300);
+    border: 1px solid rgba(196, 154, 69, 0.4);
+    transition: background 0.2s, border-color 0.2s, color 0.2s;
+  }
+
+  :global(.timer-active-badge.urgent) {
+    border-color: var(--color-error) !important;
+    color: #ff8a80 !important;
+    background: rgba(167, 71, 59, 0.3) !important;
+  }
+
+  /* ── Question ── */
+  .question-container {
+    margin-bottom: var(--space-4);
+    text-align: left;
+  }
+
+  .pool-tag {
+    display: inline-block;
+    background: rgba(196, 154, 69, 0.2);
+    border: 1px solid var(--color-gold-500);
+    color: var(--color-gold-300);
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin-bottom: var(--space-2);
+  }
+
+  .question-title {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 700;
+    line-height: 1.35;
+    color: var(--color-cream-50);
+  }
+
+  /* ── Options (dynamic) ── */
+  .options-container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  :global(.quiz-option-btn) {
+    width: 100%;
+    min-height: 56px;
+    background: rgba(56, 32, 20, 0.7);
+    border: 1px solid rgba(196, 154, 69, 0.35);
+    border-radius: var(--radius-input);
+    padding: var(--space-3) var(--space-4);
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    text-align: left;
+    cursor: pointer;
+    transition: background 0.18s, border-color 0.18s, transform 0.12s;
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    color: var(--color-cream-50);
+  }
+
+  :global(.quiz-option-btn:hover:not(:disabled)) {
+    background: rgba(80, 55, 31, 0.9);
+    border-color: var(--color-gold-500);
+    transform: translateY(-1px);
+  }
+
+  :global(.quiz-option-btn:focus-visible) {
+    outline: 2px solid var(--color-gold-300);
+    outline-offset: 2px;
+  }
+
+  :global(.quiz-option-btn:disabled) {
+    cursor: not-allowed;
+  }
+
+  :global(.quiz-option-badge) {
+    width: 32px;
+    height: 32px;
+    background: rgba(196, 154, 69, 0.2);
+    border: 1px solid var(--color-gold-500);
+    color: var(--color-gold-300);
+    font-family: var(--font-mono);
+    font-weight: 700;
+    font-size: 0.9rem;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: background 0.18s, border-color 0.18s, color 0.18s;
+  }
+
+  :global(.quiz-option-text) {
+    flex: 1;
+    line-height: 1.35;
+  }
+
+  :global(.quiz-option-btn.state-correct) {
+    background: rgba(63, 118, 87, 0.3) !important;
+    border-color: var(--color-success) !important;
+    color: #a7f3d0 !important;
+  }
+  :global(.quiz-option-btn.state-correct .quiz-option-badge) {
+    background: var(--color-success) !important;
+    color: #fff !important;
+    border-color: #6ee7b7 !important;
+  }
+
+  :global(.quiz-option-btn.state-wrong) {
+    background: rgba(167, 71, 59, 0.3) !important;
+    border-color: var(--color-error) !important;
+    color: #fecaca !important;
+  }
+  :global(.quiz-option-btn.state-wrong .quiz-option-badge) {
+    background: var(--color-error) !important;
+    color: #fff !important;
+    border-color: #f87171 !important;
+  }
+
+  /* ── Feedback Panel ── */
+  .feedback-panel {
+    margin-top: var(--space-4);
+    background: rgba(28, 15, 9, 0.95);
+    border: 1px solid rgba(196, 154, 69, 0.4);
+    border-radius: var(--radius-input);
+    padding: var(--space-4);
+    animation: fadeIn 0.25s ease;
+    text-align: left;
+  }
+
+  .feedback-header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    margin-bottom: var(--space-2);
+  }
+
+  .feedback-icon-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .feedback-title-box {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .feedback-title {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    font-weight: 700;
+  }
+
+  .feedback-score-gain {
+    font-size: 0.85rem;
+    font-family: var(--font-mono);
+    font-weight: 700;
+  }
+
+  .feedback-explanation {
+    font-size: 0.85rem;
+    color: var(--color-cream-100);
+    line-height: 1.45;
+    background: rgba(0, 0, 0, 0.25);
+    padding: var(--space-3);
+    border-radius: var(--radius-input);
+    border-left: 3px solid var(--color-gold-500);
+    margin-bottom: var(--space-4);
+  }
+
+  .btn-primary {
+    width: 100%;
+    min-height: 48px;
+    background: linear-gradient(135deg, var(--color-gold-500) 0%, #a87e2b 100%);
+    color: var(--color-brown-950);
+    font-family: var(--font-body);
+    font-size: 1rem;
+    font-weight: 700;
+    border: none;
+    border-radius: var(--radius-button);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    cursor: pointer;
+    transition: transform 0.15s ease, filter 0.15s ease;
+  }
+
+  .btn-primary:hover { filter: brightness(1.1); }
+  .btn-primary:active { transform: scale(0.98); }
+
+  @keyframes pulse { from { opacity: 0.7; } to { opacity: 1; } }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+</style>

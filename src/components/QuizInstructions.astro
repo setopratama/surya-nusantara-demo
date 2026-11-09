@@ -1,0 +1,173 @@
+---
+---
+
+<section id="stage-instructions" class="stage-card" style="display: none;" aria-labelledby="instr-title">
+  <div class="card-header">
+    <div class="step-badge">Langkah 4 dari 4: Panduan Kuis</div>
+    <h1 id="instr-title" class="title-display">Aturan Permainan</h1>
+    <p class="subtitle-text">
+      Uji ketajaman ingatan dan fokus Anda seputar kekayaan Nusantara serta dedikasi Surya Nusantara.
+    </p>
+  </div>
+
+  <div class="rules-list">
+    <div class="rule-item">
+      <div class="rule-num">1</div>
+      <div class="rule-content">
+        <h2 class="rule-heading">10 Pertanyaan Pilihan Ganda</h2>
+        <p class="rule-desc">7 soal umum warisan &amp; keahlian Nusantara, dan 3 soal seputar kampanye Surya Nusantara.</p>
+      </div>
+    </div>
+
+    <div class="rule-item">
+      <div class="rule-num">2</div>
+      <div class="rule-content">
+        <h2 class="rule-heading">3 Detik Waktu Membaca</h2>
+        <p class="rule-desc">Diberikan jeda persiapan 3 detik sebelum penghitungan waktu menjawab dimulai.</p>
+      </div>
+    </div>
+
+    <div class="rule-item">
+      <div class="rule-num">3</div>
+      <div class="rule-content">
+        <h2 class="rule-heading">10 Detik Waktu Menjawab</h2>
+        <p class="rule-desc">Pilihlah 1 jawaban yang paling tepat. Pilihan langsung terkunci setelah ditekan.</p>
+      </div>
+    </div>
+
+    <div class="rule-item">
+      <div class="rule-num">4</div>
+      <div class="rule-content">
+        <h2 class="rule-heading">Penghitungan Skor (Maks. 100 Poin)</h2>
+        <p class="rule-desc">Jawaban benar mendapat poin sesuai detik menjawab (1–10 poin). Jawaban salah atau waktu habis bernilai 0 poin.</p>
+      </div>
+    </div>
+  </div>
+
+  <button id="btn-start-quiz" class="btn-primary" type="button">
+    <span>Mulai Kuis Sekarang</span>
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <polygon points="5 3 19 12 5 21 5 3"></polygon>
+    </svg>
+  </button>
+</section>
+
+<style>
+  .stage-card {
+    background: rgba(40, 23, 15, 0.95);
+    border: 1px solid rgba(196, 154, 69, 0.3);
+    border-radius: var(--radius-card);
+    padding: var(--space-6);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    animation: fadeIn 0.3s ease;
+  }
+
+  .step-badge {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--color-gold-300);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: var(--space-2);
+  }
+
+  .title-display {
+    font-family: var(--font-display);
+    font-size: 1.75rem;
+    color: var(--color-gold-300);
+    margin-bottom: var(--space-2);
+    line-height: 1.2;
+  }
+
+  .subtitle-text {
+    font-size: 0.9rem;
+    color: var(--color-cream-100);
+    line-height: 1.5;
+    margin-bottom: var(--space-4);
+  }
+
+  .rules-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    margin-bottom: var(--space-5);
+  }
+
+  .rule-item {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-3);
+    background: rgba(56, 32, 20, 0.6);
+    border: 1px solid rgba(196, 154, 69, 0.25);
+    border-radius: var(--radius-input);
+    padding: var(--space-3) var(--space-4);
+    text-align: left;
+  }
+
+  .rule-num {
+    width: 28px;
+    height: 28px;
+    background: var(--color-gold-500);
+    color: var(--color-brown-950);
+    border-radius: 50%;
+    font-family: var(--font-mono);
+    font-weight: 700;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .rule-content {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .rule-heading {
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--color-cream-50);
+  }
+
+  .rule-desc {
+    font-size: 0.8rem;
+    color: var(--color-cream-100);
+    line-height: 1.35;
+    opacity: 0.9;
+  }
+
+  .btn-primary {
+    width: 100%;
+    min-height: 48px;
+    background: linear-gradient(135deg, var(--color-gold-500) 0%, #a87e2b 100%);
+    color: var(--color-brown-950);
+    font-family: var(--font-body);
+    font-size: 1rem;
+    font-weight: 700;
+    border: none;
+    border-radius: var(--radius-button);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    cursor: pointer;
+    transition: transform 0.15s ease, filter 0.15s ease;
+  }
+
+  .btn-primary:hover {
+    filter: brightness(1.1);
+  }
+
+  .btn-primary:active {
+    transform: scale(0.98);
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>

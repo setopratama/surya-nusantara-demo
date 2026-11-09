@@ -1,0 +1,257 @@
+---
+---
+
+<section id="stage-age-gate" class="stage-card" aria-labelledby="age-gate-title">
+  <div class="card-header">
+    <div class="qr-info-chip">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <rect x="3" y="3" width="7" height="7"></rect>
+        <rect x="14" y="3" width="7" height="7"></rect>
+        <rect x="14" y="14" width="7" height="7"></rect>
+        <rect x="3" y="14" width="7" height="7"></rect>
+      </svg>
+      <span>Aktivasi QR / Online Web Demo</span>
+    </div>
+    <h1 id="age-gate-title" class="title-display">Verifikasi Usia Peserta</h1>
+    <p class="subtitle-text">
+      Selamat datang di kuis <strong>Dedikasi Di Balik Rasa</strong>. Pengalaman ini diperuntukkan secara khusus bagi perokok dewasa.
+    </p>
+  </div>
+
+  <div class="card-body">
+    <div class="prompt-box">
+      <p class="question-label">Apakah Anda adalah perokok dewasa yang berusia <strong>21 tahun atau lebih</strong>?</p>
+      
+      <div class="radio-options" role="radiogroup" aria-label="Konfirmasi Usia 21 Tahun ke Atas">
+        <label class="option-label" for="age-yes">
+          <input type="radio" id="age-yes" name="age-confirm" value="yes" />
+          <span class="custom-radio"></span>
+          <span class="option-text">Ya, saya berusia 21 tahun atau lebih</span>
+        </label>
+        
+        <label class="option-label" for="age-no">
+          <input type="radio" id="age-no" name="age-confirm" value="no" />
+          <span class="custom-radio"></span>
+          <span class="option-text">Tidak, saya berusia di bawah 21 tahun</span>
+        </label>
+      </div>
+    </div>
+
+    <div id="age-error-msg" class="field-error" style="display: none;" role="alert">
+      Silakan tentukan pilihan konfirmasi usia Anda untuk melanjutkan.
+    </div>
+
+    <button id="btn-submit-age" class="btn-primary" type="button">
+      <span>Lanjutkan</span>
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <line x1="5" y1="12" x2="19" y2="12"></line>
+        <polyline points="12 5 19 12 12 19"></polyline>
+      </svg>
+    </button>
+  </div>
+</section>
+
+<!-- Denied Access Panel -->
+<section id="stage-age-denied" class="stage-card" style="display: none;" aria-labelledby="denied-title" role="alert">
+  <div class="card-header text-center">
+    <div class="denied-icon" aria-hidden="true">
+      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"></circle>
+        <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line>
+      </svg>
+    </div>
+    <h2 id="denied-title" class="title-display error-text">Akses Dibatasi</h2>
+    <p class="subtitle-text">
+      Mohon maaf, pengalaman kuis ini hanya diperuntukkan bagi perokok dewasa yang berusia 21 tahun atau lebih sesuai kebijakan regulasi dan kepatuhan kampanye.
+    </p>
+  </div>
+  <div class="card-body">
+    <button id="btn-reset-denied" class="btn-secondary" type="button">
+      Kembali ke Pilihan Awal
+    </button>
+  </div>
+</section>
+
+<style>
+  .stage-card {
+    background: rgba(40, 23, 15, 0.95);
+    border: 1px solid rgba(196, 154, 69, 0.3);
+    border-radius: var(--radius-card);
+    padding: var(--space-6);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    animation: fadeIn 0.3s ease;
+  }
+
+  .qr-info-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--color-gold-300);
+    background: rgba(196, 154, 69, 0.15);
+    border: 1px solid rgba(196, 154, 69, 0.3);
+    padding: var(--space-1) var(--space-3);
+    border-radius: 9999px;
+    margin-bottom: var(--space-3);
+  }
+
+  .title-display {
+    font-family: var(--font-display);
+    font-size: 1.75rem;
+    color: var(--color-gold-300);
+    margin-bottom: var(--space-2);
+    line-height: 1.2;
+  }
+
+  .subtitle-text {
+    font-size: 0.95rem;
+    color: var(--color-cream-100);
+    line-height: 1.5;
+  }
+
+  .prompt-box {
+    margin: var(--space-5) 0;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(196, 154, 69, 0.2);
+    border-radius: var(--radius-input);
+    padding: var(--space-4);
+  }
+
+  .question-label {
+    font-size: 0.95rem;
+    color: var(--color-cream-50);
+    margin-bottom: var(--space-4);
+  }
+
+  .radio-options {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .option-label {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-3) var(--space-4);
+    background: rgba(56, 32, 20, 0.6);
+    border: 1px solid rgba(196, 154, 69, 0.25);
+    border-radius: var(--radius-input);
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .option-label:hover {
+    border-color: var(--color-gold-500);
+    background: rgba(80, 55, 31, 0.6);
+  }
+
+  .option-label input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .custom-radio {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 2px solid var(--color-gold-500);
+    display: inline-block;
+    position: relative;
+    flex-shrink: 0;
+  }
+
+  .option-label input[type="radio"]:checked + .custom-radio::after {
+    content: '';
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 10px;
+    height: 10px;
+    background: var(--color-gold-300);
+    border-radius: 50%;
+  }
+
+  .option-label input[type="radio"]:focus-visible + .custom-radio {
+    outline: 2px solid var(--color-gold-300);
+    outline-offset: 2px;
+  }
+
+  .option-text {
+    font-size: 0.95rem;
+    color: var(--color-cream-50);
+    font-weight: 500;
+  }
+
+  .field-error {
+    color: #ff8a80;
+    font-size: 0.85rem;
+    margin-bottom: var(--space-3);
+  }
+
+  .btn-primary {
+    width: 100%;
+    min-height: 48px;
+    background: linear-gradient(135deg, var(--color-gold-500) 0%, #a87e2b 100%);
+    color: var(--color-brown-950);
+    font-family: var(--font-body);
+    font-size: 1rem;
+    font-weight: 700;
+    border: none;
+    border-radius: var(--radius-button);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    cursor: pointer;
+    transition: transform 0.15s ease, filter 0.15s ease;
+  }
+
+  .btn-primary:hover {
+    filter: brightness(1.1);
+  }
+
+  .btn-primary:active {
+    transform: scale(0.98);
+  }
+
+  .btn-secondary {
+    width: 100%;
+    min-height: 48px;
+    background: transparent;
+    color: var(--color-cream-100);
+    font-family: var(--font-body);
+    font-size: 1rem;
+    font-weight: 600;
+    border: 1px solid var(--color-gold-500);
+    border-radius: var(--radius-button);
+    cursor: pointer;
+    transition: background 0.2s ease;
+  }
+
+  .btn-secondary:hover {
+    background: rgba(196, 154, 69, 0.15);
+  }
+
+  .denied-icon {
+    color: var(--color-error);
+    margin-bottom: var(--space-3);
+    display: flex;
+    justify-content: center;
+  }
+
+  .error-text {
+    color: #ff8a80;
+  }
+
+  .text-center {
+    text-align: center;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>

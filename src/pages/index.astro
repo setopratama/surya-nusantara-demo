@@ -1,0 +1,24 @@
+---
+import AppShell from '../components/AppShell.astro';
+import AgeGate from '../components/AgeGate.astro';
+import RegistrationForm from '../components/RegistrationForm.astro';
+import BrandIntro from '../components/BrandIntro.astro';
+import BrandMessage from '../components/BrandMessage.astro';
+import QuizInstructions from '../components/QuizInstructions.astro';
+import QuizQuestion from '../components/QuizQuestion.astro';
+import QuizTransition from '../components/QuizTransition.astro';
+import FinalScore from '../components/FinalScore.astro';
+---
+
+<AppShell title="Kuis Dedikasi Di Balik Rasa — Surya Nusantara">
+  <AgeGate />
+  <RegistrationForm />
+  <BrandIntro />
+  <BrandMessage />
+  <QuizInstructions />
+  <QuizQuestion />
+  <QuizTransition />
+  <FinalScore />
+</AppShell>
+
+<script src="../scripts/game-controller.ts"></script>

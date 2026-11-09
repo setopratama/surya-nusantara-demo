@@ -1,0 +1,154 @@
+---
+---
+
+<section id="stage-brand-intro" class="stage-card" style="display: none;" aria-labelledby="intro-title">
+  <div class="card-header">
+    <div class="step-badge">Langkah 2 dari 4: Pengenalan Kampanye</div>
+    <h1 id="intro-title" class="title-display">Dedikasi Di Balik Rasa</h1>
+    <p class="subtitle-text">
+      Saksikan kisah dedikasi, ketelitian peracikan rasa, dan komitmen para perajin ahli Nusantara.
+    </p>
+  </div>
+
+  <div class="video-container">
+    <video
+      id="brand-intro-video"
+      class="video-player"
+      playsinline
+      controls
+      preload="metadata"
+    >
+      <source src="/assets/tvc-surya-nusantara.mp4" type="video/mp4" />
+      Browser Anda tidak mendukung pemutaran video MP4.
+    </video>
+  </div>
+
+  <div class="video-actions">
+    <div id="skip-countdown-pill" class="skip-timer-chip" aria-live="polite">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <circle cx="12" cy="12" r="10"></circle>
+        <polyline points="12 6 12 12 16 14"></polyline>
+      </svg>
+      <span>Dapat dilewati dalam <strong id="skip-seconds" class="tabular-nums">5</strong> detik</span>
+    </div>
+
+    <button id="btn-skip-intro" class="btn-primary" type="button" disabled>
+      <span>Lewati Pengenalan &amp; Lanjutkan</span>
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <polygon points="5 4 15 12 5 20 5 4"></polygon>
+        <line x1="19" y1="5" x2="19" y2="19"></line>
+      </svg>
+    </button>
+  </div>
+</section>
+
+<style>
+  .stage-card {
+    background: rgba(40, 23, 15, 0.95);
+    border: 1px solid rgba(196, 154, 69, 0.3);
+    border-radius: var(--radius-card);
+    padding: var(--space-6);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    animation: fadeIn 0.3s ease;
+  }
+
+  .step-badge {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--color-gold-300);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: var(--space-2);
+  }
+
+  .title-display {
+    font-family: var(--font-display);
+    font-size: 1.75rem;
+    color: var(--color-gold-300);
+    margin-bottom: var(--space-2);
+    line-height: 1.2;
+  }
+
+  .subtitle-text {
+    font-size: 0.9rem;
+    color: var(--color-cream-100);
+    line-height: 1.5;
+    margin-bottom: var(--space-4);
+  }
+
+  .video-container {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: #000000;
+    border: 1px solid rgba(196, 154, 69, 0.4);
+    border-radius: var(--radius-input);
+    overflow: hidden;
+    margin-bottom: var(--space-4);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
+  }
+
+  .video-player {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .video-actions {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .skip-timer-chip {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    font-size: 0.85rem;
+    color: var(--color-gold-300);
+    background: rgba(196, 154, 69, 0.12);
+    border: 1px solid rgba(196, 154, 69, 0.3);
+    border-radius: 9999px;
+    padding: var(--space-2) var(--space-4);
+  }
+
+  .btn-primary {
+    width: 100%;
+    min-height: 48px;
+    background: linear-gradient(135deg, var(--color-gold-500) 0%, #a87e2b 100%);
+    color: var(--color-brown-950);
+    font-family: var(--font-body);
+    font-size: 1rem;
+    font-weight: 700;
+    border: none;
+    border-radius: var(--radius-button);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    cursor: pointer;
+    transition: transform 0.15s ease, filter 0.15s ease, opacity 0.2s ease;
+  }
+
+  .btn-primary:hover:not(:disabled) {
+    filter: brightness(1.1);
+  }
+
+  .btn-primary:active:not(:disabled) {
+    transform: scale(0.98);
+  }
+
+  .btn-primary:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+    background: #50371f;
+    color: #9e8d7c;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>

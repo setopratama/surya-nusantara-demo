@@ -1,0 +1,83 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@600;700&family=Roboto+Condensed:wght@600;700&family=Roboto:wght@400;500;700&display=swap');
+
+:root {
+  /* Color Palette - Modern Nusantara Craftsmanship */
+  --color-brown-950: #28170f;
+  --color-brown-900: #382014;
+  --color-brown-800: #50371f;
+  --color-brown-700: #705321;
+  --color-gold-500: #c49a45;
+  --color-gold-300: #e2c47b;
+  --color-cream-100: #f1ebdd;
+  --color-cream-50: #faf7f0;
+  --color-ink-900: #2b211b;
+  --color-ink-600: #6e6258;
+  --color-accent-terracotta: #a94f3c;
+  --color-success: #3f7657;
+  --color-error: #a7473b;
+  --color-border-light: #ded5c5;
+  --color-border-dark: #6c563a;
+
+  /* Typography */
+  --font-display: 'Roboto Condensed', 'Arial Narrow', Arial, sans-serif;
+  --font-body: 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+  --font-mono: 'IBM Plex Mono', 'SFMono-Regular', Consolas, monospace;
+
+  /* Spacing */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+
+  /* Sizing & Borders */
+  --content-max-width: 560px;
+  --radius-card: 14px;
+  --radius-button: 10px;
+  --radius-input: 10px;
+}
+
+/* Reset & Base Styles */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  min-height: 100%;
+  background-color: var(--color-brown-950);
+  color: var(--color-cream-50);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Tabular numbers for countdown and scores */
+.tabular-nums {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Accessibility Focus Ring */
+:focus-visible {
+  outline: 2px solid var(--color-gold-300);
+  outline-offset: 2px;
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
