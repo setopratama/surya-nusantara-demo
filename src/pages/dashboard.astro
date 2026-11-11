@@ -2888,7 +2888,7 @@ const DEMO_RECENT_PARTICIPANTS = [
           const maxCityCount = stats.topCities[0]?.count || 1;
           citiesList.innerHTML = stats.topCities
             .map((c: any) => {
-              const pct = Math.round((c.count / maxCityCount) * 100);
+              const pct = c.percentage !== undefined ? c.percentage : Math.round((c.count / maxCityCount) * 100);
               return `
                 <div class="city-row">
                   <span class="city-name">${c.domicile}</span>
@@ -2921,11 +2921,18 @@ const DEMO_RECENT_PARTICIPANTS = [
 
         tbody.innerHTML = rows
           .map((r) => {
-            const score = r.totalScore ?? 0;
+            const score = r.totalScore ?? r.score ?? 0;
             const scoreBadgeClass =
               score >= 80 ? 'score-high' : score >= 60 ? 'score-mid' : score >= 40 ? 'score-fair' : 'score-low';
 
-            const timeStr = r.createdAt ? new Date(r.createdAt).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }) : '-';
+            const timeStr =
+              r.time ||
+              (r.createdAt
+                ? new Date(r.createdAt).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }) +
+                  ', ' +
+                  new Date(r.createdAt).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }) +
+                  ' WIB'
+                : '10 Nov 2026, 13:18 WIB');
 
             return `
               <tr>

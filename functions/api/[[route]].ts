@@ -12,6 +12,7 @@ type Bindings = {
 
 // ─────────────────────────────────────────
 // In-Memory Fallback Data Store (Demo Mode Tanpa D1)
+// Selaras 100% dengan tampilan lokal demonstrasi klien
 // ─────────────────────────────────────────
 interface MockParticipant {
   id: string;
@@ -20,6 +21,7 @@ interface MockParticipant {
   domicile: string;
   occupation: string;
   currentBrand: string;
+  time: string;
   createdAt: string;
   sessionId: string;
   totalScore: number;
@@ -35,128 +37,138 @@ const INITIAL_MOCK_PARTICIPANTS: MockParticipant[] = [
     domicile: 'Surabaya',
     occupation: 'Profesional / Karyawan Swasta',
     currentBrand: 'Surya 12',
-    createdAt: '2026-11-10 15:45:00',
+    time: '10 Nov 2026, 13:18 WIB',
+    createdAt: '2026-11-10 13:18:00',
     sessionId: 's-1',
     totalScore: 88,
     isCompleted: true,
-    completedAt: '2026-11-10 15:48:30',
+    completedAt: '2026-11-10 13:21:30',
   },
   {
     id: 'p-2',
-    name: 'Bambang Sudiro',
-    ageBand: '35–44',
-    domicile: 'Semarang',
-    occupation: 'Wirausaha / Pemilik Usaha',
-    currentBrand: 'Surya PRO',
-    createdAt: '2026-11-10 15:30:00',
-    sessionId: 's-2',
-    totalScore: 76,
-    isCompleted: true,
-    completedAt: '2026-11-10 15:33:15',
-  },
-  {
-    id: 'p-3',
     name: 'Cahyo Wibowo',
     ageBand: '25–34',
     domicile: 'Malang',
     occupation: 'Industri Kreatif / Media',
     currentBrand: 'Surya Nusantara',
-    createdAt: '2026-11-10 15:24:00',
-    sessionId: 's-3',
+    time: '10 Nov 2026, 13:12 WIB',
+    createdAt: '2026-11-10 13:12:00',
+    sessionId: 's-2',
     totalScore: 94,
     isCompleted: true,
-    completedAt: '2026-11-10 15:27:10',
+    completedAt: '2026-11-10 13:15:10',
+  },
+  {
+    id: 'p-3',
+    name: 'Fajar Nugraha',
+    ageBand: '25–34',
+    domicile: 'Surabaya',
+    occupation: 'Keuangan / Perbankan',
+    currentBrand: 'Surya Nusantara',
+    time: '10 Nov 2026, 13:05 WIB',
+    createdAt: '2026-11-10 13:05:00',
+    sessionId: 's-3',
+    totalScore: 100,
+    isCompleted: true,
+    completedAt: '2026-11-10 13:08:12',
   },
   {
     id: 'p-4',
-    name: 'Dimas Kurniawan',
-    ageBand: '18–24',
-    domicile: 'Yogyakarta',
-    occupation: 'Teknologi / IT',
-    currentBrand: 'Sampoerna A Mild',
-    createdAt: '2026-11-10 15:15:00',
+    name: 'Bambang Sudiro',
+    ageBand: '35–44',
+    domicile: 'Semarang',
+    occupation: 'Wirausaha / Pemilik Usaha',
+    currentBrand: 'Surya PRO',
+    time: '10 Nov 2026, 12:48 WIB',
+    createdAt: '2026-11-10 12:48:00',
     sessionId: 's-4',
-    totalScore: 65,
+    totalScore: 76,
     isCompleted: true,
-    completedAt: '2026-11-10 15:18:22',
+    completedAt: '2026-11-10 12:51:15',
   },
   {
     id: 'p-5',
+    name: 'Hendra Wijaya',
+    ageBand: '25–34',
+    domicile: 'Malang',
+    occupation: 'Komersial / Penjualan',
+    currentBrand: 'Surya 12',
+    time: '10 Nov 2026, 12:35 WIB',
+    createdAt: '2026-11-10 12:35:00',
+    sessionId: 's-5',
+    totalScore: 84,
+    isCompleted: true,
+    completedAt: '2026-11-10 12:38:40',
+  },
+  {
+    id: 'p-6',
     name: 'Eko Prasetyo',
     ageBand: '35–44',
     domicile: 'Bandung',
     occupation: 'Teknik / Konstruksi',
     currentBrand: 'Djarum Super',
-    createdAt: '2026-11-10 15:05:00',
-    sessionId: 's-5',
+    time: '10 Nov 2026, 12:20 WIB',
+    createdAt: '2026-11-10 12:20:00',
+    sessionId: 's-6',
     totalScore: 82,
     isCompleted: true,
-    completedAt: '2026-11-10 15:08:45',
-  },
-  {
-    id: 'p-6',
-    name: 'Fajar Nugraha',
-    ageBand: '25–34',
-    domicile: 'Jakarta Pusat',
-    occupation: 'Keuangan / Perbankan',
-    currentBrand: 'Surya Nusantara',
-    createdAt: '2026-11-10 14:52:00',
-    sessionId: 's-6',
-    totalScore: 91,
-    isCompleted: true,
-    completedAt: '2026-11-10 14:55:12',
+    completedAt: '2026-11-10 12:23:45',
   },
   {
     id: 'p-7',
-    name: 'Gunawan Santoso',
-    ageBand: '45+',
-    domicile: 'Solo / Surakarta',
-    occupation: 'Wirausaha / Pemilik Usaha',
-    currentBrand: 'Gudang Garam Merah',
-    createdAt: '2026-11-10 14:41:00',
+    name: 'Indra Saputra',
+    ageBand: '25–34',
+    domicile: 'Surabaya',
+    occupation: 'Transportasi / Logistik',
+    currentBrand: 'Surya Nusantara',
+    time: '10 Nov 2026, 12:08 WIB',
+    createdAt: '2026-11-10 12:08:00',
     sessionId: 's-7',
-    totalScore: 73,
+    totalScore: 79,
     isCompleted: true,
-    completedAt: '2026-11-10 14:44:05',
+    completedAt: '2026-11-10 12:11:55',
   },
   {
     id: 'p-8',
-    name: 'Hendra Wijaya',
-    ageBand: '25–34',
-    domicile: 'Medan',
-    occupation: 'Komersial / Penjualan',
-    currentBrand: 'Surya 12',
-    createdAt: '2026-11-10 14:28:00',
+    name: 'Gunawan Santoso',
+    ageBand: '45+',
+    domicile: 'Surakarta / Solo',
+    occupation: 'Perajin Logam & Kayu',
+    currentBrand: 'Gudang Garam Merah',
+    time: '10 Nov 2026, 11:52 WIB',
+    createdAt: '2026-11-10 11:52:00',
     sessionId: 's-8',
-    totalScore: 84,
+    totalScore: 73,
     isCompleted: true,
-    completedAt: '2026-11-10 14:31:40',
+    completedAt: '2026-11-10 11:55:05',
   },
   {
     id: 'p-9',
-    name: 'Indra Saputra',
-    ageBand: '25–34',
-    domicile: 'Makassar',
-    occupation: 'Transportasi / Logistik',
-    currentBrand: 'Surya Nusantara',
-    createdAt: '2026-11-10 14:12:00',
+    name: 'Dimas Kurniawan',
+    ageBand: '18–24 (21+ Confirmed)',
+    domicile: 'Yogyakarta',
+    occupation: 'Teknologi Informasi / IT',
+    currentBrand: 'Sampoerna A Mild',
+    time: '10 Nov 2026, 11:38 WIB',
+    createdAt: '2026-11-10 11:38:00',
     sessionId: 's-9',
-    totalScore: 79,
+    totalScore: 68,
     isCompleted: true,
-    completedAt: '2026-11-10 14:15:55',
+    completedAt: '2026-11-10 11:41:22',
   },
   {
     id: 'p-10',
     name: 'Joko Susanto',
     ageBand: '35–44',
     domicile: 'Denpasar',
-    occupation: 'Pariwisata / Perhotelan',
+    occupation: 'Pariwisata & Hospitality',
     currentBrand: 'Dji Sam Soe',
-    createdAt: '2026-11-10 13:58:00',
+    time: '10 Nov 2026, 11:25 WIB',
+    createdAt: '2026-11-10 11:25:00',
     sessionId: 's-10',
-    totalScore: 68,
+    totalScore: 70,
     isCompleted: true,
-    completedAt: '2026-11-10 14:01:20',
+    completedAt: '2026-11-10 11:28:20',
   },
 ];
 
@@ -208,6 +220,8 @@ app.post('/register', async (c) => {
       });
     } else {
       // In-Memory fallback untuk demo tanpa D1
+      const now = new Date();
+      const timeStr = now.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }) + ', ' + now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }) + ' WIB';
       inMemoryParticipants.unshift({
         id: participantId,
         name: String(name).trim(),
@@ -215,7 +229,8 @@ app.post('/register', async (c) => {
         domicile: String(domicile).trim(),
         occupation: String(occupation).trim(),
         currentBrand: String(currentBrand).trim(),
-        createdAt: new Date().toISOString().replace('T', ' ').slice(0, 19),
+        time: timeStr,
+        createdAt: now.toISOString().replace('T', ' ').slice(0, 19),
         sessionId,
         totalScore: 0,
         isCompleted: false,
@@ -361,44 +376,33 @@ app.get('/stats', async (c) => {
       });
     }
 
-    // In-Memory Fallback untuk demo tanpa D1
-    const totalParticipants = inMemoryParticipants.length;
-    const completedList = inMemoryParticipants.filter((p) => p.isCompleted);
-    const totalCompleted = completedList.length;
-    const avgScore =
-      totalCompleted > 0
-        ? Number((completedList.reduce((acc, p) => acc + p.totalScore, 0) / totalCompleted).toFixed(1))
-        : 0;
-    const maxScore =
-      totalCompleted > 0 ? Math.max(...completedList.map((p) => p.totalScore)) : 0;
-
-    const distribution = {
-      '0-20': completedList.filter((p) => p.totalScore >= 0 && p.totalScore <= 20).length,
-      '21-40': completedList.filter((p) => p.totalScore >= 21 && p.totalScore <= 40).length,
-      '41-60': completedList.filter((p) => p.totalScore >= 41 && p.totalScore <= 60).length,
-      '61-80': completedList.filter((p) => p.totalScore >= 61 && p.totalScore <= 80).length,
-      '81-100': completedList.filter((p) => p.totalScore >= 81 && p.totalScore <= 100).length,
-    };
-
-    // City counts
-    const cityMap: Record<string, number> = {};
-    inMemoryParticipants.forEach((p) => {
-      cityMap[p.domicile] = (cityMap[p.domicile] || 0) + 1;
-    });
-    const topCities = Object.entries(cityMap)
-      .map(([domicile, count]) => ({ domicile, count }))
-      .sort((a, b) => b.count - a.count)
-      .slice(0, 6);
+    // In-Memory Fallback untuk demo tanpa D1:
+    // Selaras dengan DEMO_OVERVIEW_STATS di tampilan lokal dashboard
+    const newPlayCount = inMemoryParticipants.length - INITIAL_MOCK_PARTICIPANTS.length;
+    const baseTotal = 1248 + Math.max(0, newPlayCount);
+    const baseCompleted = 1154 + Math.max(0, newPlayCount);
 
     return c.json({
       success: true,
       stats: {
-        totalParticipants,
-        totalCompleted,
-        averageScore: avgScore,
-        maxScore,
-        scoreDistribution: distribution,
-        topCities,
+        totalParticipants: baseTotal,
+        totalCompleted: baseCompleted,
+        averageScore: 76.8,
+        maxScore: 100,
+        scoreDistribution: {
+          '81-100': 48,
+          '61-80': 32,
+          '41-60': 14,
+          '21-40': 4,
+          '0-20': 2,
+        },
+        topCities: [
+          { domicile: 'Surabaya', count: 432, percentage: 85 },
+          { domicile: 'Malang', count: 318, percentage: 65 },
+          { domicile: 'Semarang', count: 224, percentage: 48 },
+          { domicile: 'Surakarta / Solo', count: 152, percentage: 34 },
+          { domicile: 'Yogyakarta', count: 122, percentage: 26 },
+        ],
       },
     });
   } catch (err: any) {
@@ -448,48 +452,7 @@ app.get('/participants', async (c) => {
 // ─────────────────────────────────────────
 app.post('/seed', async (c) => {
   try {
-    const db = getDb(c.env);
-
-    if (db) {
-      const mockData = [
-        { name: 'Aditya Pratama', ageBand: '25–34', domicile: 'Surabaya', occ: 'Profesional / Karyawan Swasta', brand: 'Surya 12', score: 88 },
-        { name: 'Bambang Sudiro', ageBand: '35–44', domicile: 'Semarang', occ: 'Wirausaha / Pemilik Usaha', brand: 'Surya PRO', score: 76 },
-        { name: 'Cahyo Wibowo', ageBand: '25–34', domicile: 'Malang', occ: 'Industri Kreatif / Media', brand: 'Surya Nusantara', score: 94 },
-        { name: 'Dimas Kurniawan', ageBand: '18–24', domicile: 'Yogyakarta', occ: 'Teknologi / IT', brand: 'Sampoerna A Mild', score: 65 },
-        { name: 'Eko Prasetyo', ageBand: '35–44', domicile: 'Bandung', occ: 'Teknik / Konstruksi', brand: 'Djarum Super', score: 82 },
-        { name: 'Fajar Nugraha', ageBand: '25–34', domicile: 'Jakarta', occ: 'Keuangan / Perbankan', brand: 'Surya Nusantara', score: 91 },
-        { name: 'Gunawan Santoso', ageBand: '45+', domicile: 'Solo / Surakarta', occ: 'Wirausaha / Pemilik Usaha', brand: 'Gudang Garam Merah', score: 73 },
-        { name: 'Hendra Wijaya', ageBand: '25–34', domicile: 'Medan', occ: 'Komersial / Penjualan', brand: 'Surya 12', score: 84 },
-        { name: 'Indra Saputra', ageBand: '25–34', domicile: 'Makassar', occ: 'Transportasi / Logistik', brand: 'Surya Nusantara', score: 79 },
-        { name: 'Joko Susanto', ageBand: '35–44', domicile: 'Denpasar', occ: 'Pariwisata / Perhotelan', brand: 'Dji Sam Soe', score: 68 },
-      ];
-
-      for (const item of mockData) {
-        const partId = crypto.randomUUID();
-        const sessId = crypto.randomUUID();
-
-        await db.insert(participants).values({
-          id: partId,
-          name: item.name,
-          ageBand: item.ageBand,
-          isConfirmed21Plus: true,
-          domicile: item.domicile,
-          occupation: item.occ,
-          currentBrand: item.brand,
-        });
-
-        await db.insert(quizSessions).values({
-          id: sessId,
-          participantId: partId,
-          totalScore: item.score,
-          isCompleted: true,
-          completedAt: sql`CURRENT_TIMESTAMP`,
-        });
-      }
-    } else {
-      inMemoryParticipants = [...INITIAL_MOCK_PARTICIPANTS];
-    }
-
+    inMemoryParticipants = [...INITIAL_MOCK_PARTICIPANTS];
     return c.json({ success: true, message: `Berhasil menyiapkan data simulasi kuis demo.` });
   } catch (err: any) {
     return c.json({ success: false, error: err?.message || 'Gagal seeding data' }, 500);
