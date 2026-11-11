@@ -1,0 +1,1680 @@
+---
+import '../../styles/global.css';
+import { QUESTIONS_BANK } from '../../data/questions';
+import { DISTRIBUTIONS_DATA, PARTICIPANTS_DATA } from '../../data/distributions';
+
+const totalParticipantsCount = PARTICIPANTS_DATA.length;
+const completedCount = PARTICIPANTS_DATA.filter((p) => p.status.includes('Selesai')).length;
+const avgAllScore = (
+  PARTICIPANTS_DATA.reduce((acc, curr) => acc + curr.score, 0) / (totalParticipantsCount || 1)
+).toFixed(1);
+const completionRateAll = ((completedCount / (totalParticipantsCount || 1)) * 100).toFixed(1) + '%';
+---
+
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="robots" content="noindex, nofollow, noarchive, nosnippet" />
+    <title>Data Peserta & Sesi Kuis — Surya Nusantara</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@600;700&family=Roboto+Condensed:wght@600;700&family=Roboto:wght@400;500;700&display=swap"
+    />
+  </head>
+  <body>
+    <div class="dashboard-wrapper">
+      <!-- Top Slim Header -->
+      <header class="dash-header">
+        <div class="dash-header-inner">
+          <div class="dash-brand">
+            <button id="btn-sidebar-toggle" class="btn-sidebar-toggle" aria-label="Toggle Menu" title="Toggle Navigasi">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+              </svg>
+            </button>
+            <a href="/dashboard#overview" class="brand-link" title="Dashboard Surya Nusantara">
+              <img
+                src="/assets/logo_gold.png"
+                alt="Surya Nusantara"
+                class="dash-logo"
+                width="1536"
+                height="1024"
+              />
+            </a>
+          </div>
+
+          <div class="dash-actions">
+            <a href="/dashboard#distribusi-soal" class="btn-dash-action" title="Kembali ke halaman Distribusi Soal">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="19" y1="12" x2="5" y2="12"></line>
+                <polyline points="12 19 5 12 12 5"></polyline>
+              </svg>
+              <span>Distribusi Soal</span>
+            </a>
+            <button id="btn-refresh" class="btn-dash-action" title="Perbarui data tabel">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="23 4 23 10 17 10"></polyline>
+                <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+              </svg>
+              <span>Refresh</span>
+            </button>
+            <a href="/" class="btn-dash-primary" target="_blank" rel="noopener">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polygon points="5 3 19 12 5 21 5 3"></polygon>
+              </svg>
+              <span>Buka Kuis</span>
+            </a>
+          </div>
+        </div>
+      </header>
+
+      <!-- Main Layout Body: Left Sidebar + Content Area -->
+      <div class="dash-layout">
+        <!-- Left Sidebar Navigation -->
+        <aside id="dash-sidebar" class="dash-sidebar">
+          <div class="sidebar-content">
+            <!-- Section: Navigasi Utama -->
+            <div class="sidebar-section">
+              <span class="sidebar-heading">NAVIGASI UTAMA</span>
+              <nav class="sidebar-nav">
+                <a href="/dashboard#overview" class="sidebar-item">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="3" width="7" height="7"></rect>
+                    <rect x="14" y="3" width="7" height="7"></rect>
+                    <rect x="14" y="14" width="7" height="7"></rect>
+                    <rect x="3" y="14" width="7" height="7"></rect>
+                  </svg>
+                  <span>Dashboard Ringkasan</span>
+                </a>
+              </nav>
+            </div>
+
+            <!-- Section: Manajemen Soal -->
+            <div class="sidebar-section">
+              <span class="sidebar-heading">MANAJEMEN SOAL</span>
+              <nav class="sidebar-nav">
+                <a href="/dashboard#bank-soal" class="sidebar-item">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                  </svg>
+                  <span>Bank Soal</span>
+                  <span class="sidebar-badge">{QUESTIONS_BANK.length}</span>
+                </a>
+                <a href="/dashboard#kategori-soal" class="sidebar-item">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+                    <polyline points="2 17 12 22 22 17"></polyline>
+                    <polyline points="2 12 12 17 22 12"></polyline>
+                  </svg>
+                  <span>Kategori Soal</span>
+                  <span class="sidebar-badge">4</span>
+                </a>
+                <a href="/dashboard#distribusi-soal" class="sidebar-item">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="3" width="7" height="7"></rect>
+                    <rect x="14" y="3" width="7" height="7"></rect>
+                    <rect x="3" y="14" width="7" height="7"></rect>
+                    <path d="M14 14h3v3h-3z"></path>
+                    <path d="M20 14v3"></path>
+                    <path d="M14 20h3"></path>
+                    <path d="M20 20v.01"></path>
+                  </svg>
+                  <span>Distribusi Soal</span>
+                  <span class="sidebar-badge">{DISTRIBUTIONS_DATA.length}</span>
+                </a>
+                <a href="/dashboard/peserta" class="sidebar-item active">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="9" cy="7" r="4"></circle>
+                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                  </svg>
+                  <span>Data Peserta</span>
+                  <span class="sidebar-badge">{PARTICIPANTS_DATA.length}</span>
+                </a>
+                <a href="/dashboard#analitik-soal" class="sidebar-item">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="20" x2="18" y2="10"></line>
+                    <line x1="12" y1="20" x2="12" y2="4"></line>
+                    <line x1="6" y1="20" x2="6" y2="14"></line>
+                  </svg>
+                  <span>Analitik Performa Soal</span>
+                </a>
+              </nav>
+            </div>
+
+            <!-- Section: Sistem & Laporan -->
+            <div class="sidebar-section">
+              <span class="sidebar-heading">SISTEM & LAPORAN</span>
+              <nav class="sidebar-nav">
+                <a href="/dashboard#laporan" class="sidebar-item">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="9 11 12 14 22 4"></polyline>
+                    <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+                  </svg>
+                  <span>Laporan & Ekspor</span>
+                </a>
+                <a href="/dashboard#settings" class="sidebar-item">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="3"></circle>
+                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                  </svg>
+                  <span>Pengaturan</span>
+                </a>
+              </nav>
+            </div>
+          </div>
+        </aside>
+
+        <!-- Right Main Dashboard Container -->
+        <main class="dash-main">
+          <!-- Breadcrumb & Back Action -->
+          <div class="breadcrumb-bar">
+            <div class="breadcrumb-items">
+              <a href="/dashboard#overview" class="breadcrumb-link">Dashboard</a>
+              <span class="breadcrumb-separator">/</span>
+              <a href="/dashboard#distribusi-soal" class="breadcrumb-link">Distribusi Soal</a>
+              <span class="breadcrumb-separator">/</span>
+              <span class="breadcrumb-current">Data Peserta</span>
+            </div>
+            <a href="/dashboard#distribusi-soal" class="btn-back-link">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="19" y1="12" x2="5" y2="12"></line>
+                <polyline points="12 19 5 12 12 5"></polyline>
+              </svg>
+              <span>Kembali ke Distribusi Soal</span>
+            </a>
+          </div>
+
+          <!-- Page View Header -->
+          <div class="dash-view-header">
+            <div class="view-title-wrap">
+              <div class="view-title-badge-row">
+                <h1 class="view-main-title" id="page-dist-title">Data Peserta & Sesi Kuis</h1>
+                <span id="page-dist-badge" class="badge-dist-all font-mono">SEMUA DISTRIBUSI</span>
+              </div>
+              <p class="view-subtitle" id="page-dist-subtitle">
+                Daftar rekaman partisipasi, verifikasi kepatuhan 21+, demografi domisili, dan skor akhir per distribusi kampanye.
+              </p>
+            </div>
+            <div class="view-header-right">
+              <div class="dist-select-picker-wrap">
+                <label for="select-dist-filter" class="select-picker-label">Pilih Distribusi:</label>
+                <select id="select-dist-filter" class="select-picker-input">
+                  <option value="all">Semua Distribusi ({DISTRIBUTIONS_DATA.length} Event / Roadshow)</option>
+                  {DISTRIBUTIONS_DATA.map((dist) => (
+                    <option value={dist.id}>
+                      {dist.id} — {dist.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Active Distribution Metadata Card -->
+          <div id="dist-meta-card" class="dist-meta-banner">
+            <div class="dist-meta-left">
+              <div class="dist-meta-icon">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="3" width="7" height="7"></rect>
+                  <rect x="14" y="3" width="7" height="7"></rect>
+                  <rect x="3" y="14" width="7" height="7"></rect>
+                  <path d="M14 14h3v3h-3z"></path>
+                  <path d="M20 14v3"></path>
+                  <path d="M14 20h3"></path>
+                  <path d="M20 20v.01"></path>
+                </svg>
+              </div>
+              <div class="dist-meta-details">
+                <div class="dist-meta-name-row">
+                  <span class="dist-meta-name" id="banner-dist-name">Seluruh Kampanye &amp; Roadshow Nusantara</span>
+                  <span class="dist-meta-status-chip badge-dist-active" id="banner-dist-status">TERINTEGRASI</span>
+                </div>
+                <div class="dist-meta-sub-row" id="banner-dist-meta">
+                  <span id="banner-dist-location">Mencakup semua booth event offline &amp; activation channel</span>
+                  <span class="meta-dot">•</span>
+                  <span id="banner-dist-dates">Jadwal Kampanye Aktif 2026</span>
+                </div>
+              </div>
+            </div>
+            <div class="dist-meta-right">
+              <a id="btn-visit-dist-qr" href="/dashboard#distribusi-soal" class="btn-dash-action" title="Buka kelola QR distribusi ini">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="3" width="7" height="7"></rect>
+                  <rect x="14" y="3" width="7" height="7"></rect>
+                  <rect x="3" y="14" width="7" height="7"></rect>
+                  <rect x="14" y="14" width="7" height="7"></rect>
+                </svg>
+                <span>Kelola QR di Distribusi</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- KPI Cards Grid -->
+          <div class="kpi-grid">
+            <div class="kpi-card">
+              <div class="kpi-card-header">
+                <span class="kpi-card-label">Total Pemain Terdata</span>
+                <span class="kpi-icon-wrap">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="9" cy="7" r="4"></circle>
+                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                  </svg>
+                </span>
+              </div>
+              <div class="kpi-value-row">
+                <span class="kpi-value font-mono" id="kpi-total-players">{totalParticipantsCount}</span>
+                <span class="kpi-badge kpi-badge-positive">Sesi Tercatat</span>
+              </div>
+              <span class="kpi-desc">Akumulasi sesi dari titik QR masuk</span>
+            </div>
+
+            <div class="kpi-card">
+              <div class="kpi-card-header">
+                <span class="kpi-card-label">Tingkat Penyelesaian</span>
+                <span class="kpi-icon-wrap">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                </span>
+              </div>
+              <div class="kpi-value-row">
+                <span class="kpi-value font-mono" id="kpi-completion-rate">{completionRateAll}</span>
+                <span class="kpi-badge kpi-badge-positive" id="kpi-completed-ratio">{completedCount}/{totalParticipantsCount} Selesai</span>
+              </div>
+              <span class="kpi-desc">Menyelesaikan 10 pertanyaan hingga final</span>
+            </div>
+
+            <div class="kpi-card">
+              <div class="kpi-card-header">
+                <span class="kpi-card-label">Rata-rata Skor Sesi</span>
+                <span class="kpi-icon-wrap">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 14 14"></polyline>
+                  </svg>
+                </span>
+              </div>
+              <div class="kpi-value-row">
+                <span class="kpi-value font-mono" id="kpi-avg-score">{avgAllScore}</span>
+                <span class="kpi-sub-unit">/100 poin</span>
+              </div>
+              <span class="kpi-desc">Kalkulasi poin waktu (1–10 detik berjalan)</span>
+            </div>
+
+            <div class="kpi-card">
+              <div class="kpi-card-header">
+                <span class="kpi-card-label">Kepatuhan Usia 21+</span>
+                <span class="kpi-icon-wrap">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                  </svg>
+                </span>
+              </div>
+              <div class="kpi-value-row">
+                <span class="kpi-value font-mono">100%</span>
+                <span class="kpi-badge kpi-badge-positive">Strict Gate</span>
+              </div>
+              <span class="kpi-desc">Semua peserta terkonfirmasi &ge;21 tahun</span>
+            </div>
+          </div>
+
+          <!-- Main Table Card -->
+          <div class="dash-card">
+            <!-- Filter & Action Controls Bar -->
+            <div class="table-toolbar">
+              <div class="toolbar-left">
+                <!-- Search Box -->
+                <div class="search-input-wrap">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="search-icon">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                  </svg>
+                  <input
+                    type="text"
+                    id="input-search-players"
+                    class="input-search-dash"
+                    placeholder="Cari nama, domisili, pekerjaan, atau merek rokok..."
+                  />
+                </div>
+
+                <!-- Status Filter -->
+                <div class="filter-select-wrap">
+                  <select id="select-status-filter" class="filter-select-input">
+                    <option value="all">Semua Status Sesi</option>
+                    <option value="Selesai">Status: Selesai</option>
+                    <option value="Sempurna">Status: Selesai (Sempurna 100)</option>
+                    <option value="Drop-out">Status: Drop-out</option>
+                  </select>
+                </div>
+
+                <!-- Age Filter -->
+                <div class="filter-select-wrap">
+                  <select id="select-age-filter" class="filter-select-input">
+                    <option value="all">Semua Rentang Usia (21+)</option>
+                    <option value="18–24">18–24 (21+ Confirmed)</option>
+                    <option value="25–34">25–34 Tahun</option>
+                    <option value="35–44">35–44 Tahun</option>
+                    <option value="45+">45+ Tahun</option>
+                  </select>
+                </div>
+
+                <!-- Sort Order Filter -->
+                <div class="filter-select-wrap">
+                  <select id="select-sort-filter" class="filter-select-input">
+                    <option value="time-desc">Urutan: Waktu Terbaru</option>
+                    <option value="time-asc">Urutan: Waktu Terlama</option>
+                    <option value="score-desc">Urutan: Skor Tertinggi (100–0)</option>
+                    <option value="score-asc">Urutan: Skor Terendah (0–100)</option>
+                    <option value="name-asc">Urutan: Nama Peserta (A–Z)</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="toolbar-right">
+                <span id="label-table-count" class="table-count-label">
+                  Menampilkan {PARTICIPANTS_DATA.length} peserta
+                </span>
+                <button id="btn-export-csv" class="btn-dash-primary" type="button" title="Unduh data tabel dalam format CSV / Excel">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="7 10 12 15 17 10"></polyline>
+                    <line x1="12" y1="15" x2="12" y2="3"></line>
+                  </svg>
+                  <span>Export CSV (Excel)</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Full Data Table -->
+            <div class="table-responsive">
+              <table class="dash-table">
+                <thead>
+                  <tr>
+                    <th class="th-no">No.</th>
+                    <th>Waktu Bermain</th>
+                    <th>Nama Peserta</th>
+                    <th>Distribusi Kampanye</th>
+                    <th>Usia</th>
+                    <th>Kota Domisili</th>
+                    <th>Pekerjaan</th>
+                    <th>Merek Saat Ini</th>
+                    <th style="text-align: center;">Skor Kuis</th>
+                    <th style="text-align: center;">Status</th>
+                  </tr>
+                </thead>
+                <tbody id="tbody-players">
+                  {PARTICIPANTS_DATA.map((p, idx) => {
+                    const scoreBadgeClass =
+                      p.score >= 80 ? 'score-high' : p.score >= 60 ? 'score-mid' : p.score >= 40 ? 'score-fair' : 'score-low';
+                    return (
+                      <tr>
+                        <td class="td-no" style="text-align: center; width: 60px;">
+                          <span class="col-num-badge font-mono" style="display: inline-flex; align-items: center; justify-content: center; margin: 0 auto; min-width: 28px; width: 28px; height: 24px; text-align: center;">{idx + 1}</span>
+                        </td>
+                        <td class="tabular-nums text-muted text-xs">{p.time}</td>
+                        <td class="font-bold text-dark">{p.name}</td>
+                        <td>
+                          <div class="dist-cell-wrap">
+                            <span class="dist-mini-badge">{p.distId}</span>
+                            <span class="dist-mini-name">{p.distName}</span>
+                          </div>
+                        </td>
+                        <td>
+                          <span class="age-chip">{p.ageBand}</span>
+                        </td>
+                        <td>{p.domicile}</td>
+                        <td class="text-muted text-xs">{p.occupation}</td>
+                        <td>
+                          <span class="brand-chip">{p.currentBrand}</span>
+                        </td>
+                        <td style="text-align: center;">
+                          <span class={`score-pill ${scoreBadgeClass}`}>{p.score} poin</span>
+                        </td>
+                        <td style="text-align: center;">
+                          <span class={p.status.includes('Selesai') ? 'badge-status-done' : 'badge-status-dropout'}>
+                            {p.status}
+                          </span>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Table Footer -->
+            <div class="table-footer-bar">
+              <span class="text-xs text-muted">
+                Data peserta disimulasikan secara sintetis untuk demonstrasi evaluasi klien &amp; kepatuhan kampanye 21+. Tidak ada PII riil yang disimpan.
+              </span>
+              <div class="table-footer-actions">
+                <button id="btn-export-csv-bottom" class="btn-dash-action" type="button">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="7 10 12 15 17 10"></polyline>
+                    <line x1="12" y1="15" x2="12" y2="3"></line>
+                  </svg>
+                  <span>Download Spreadsheet (.csv)</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </main>
+      </div>
+
+      <!-- Toast Feedback Notification -->
+      <div id="toast-notify" class="toast-notify" style="display: none;">
+        <span id="toast-message">Pesan notifikasi</span>
+      </div>
+    </div>
+
+    <!-- Client Script for Page Filtering, URL Param Handling, and CSV Export -->
+    <script>
+      import { DISTRIBUTIONS_DATA, PARTICIPANTS_DATA } from '../../data/distributions';
+
+      // Mobile sidebar toggle handler
+      const toggleBtn = document.getElementById('btn-sidebar-toggle');
+      const sidebar = document.getElementById('dash-sidebar');
+      toggleBtn?.addEventListener('click', () => {
+        sidebar?.classList.toggle('open');
+      });
+
+      // Toast notification helper
+      function showToast(msg: string) {
+        const toast = document.getElementById('toast-notify');
+        const text = document.getElementById('toast-message');
+        if (!toast || !text) return;
+        text.textContent = msg;
+        toast.style.display = 'flex';
+        setTimeout(() => {
+          toast.style.display = 'none';
+        }, 3200);
+      }
+
+      // State
+      let allParticipants = [...PARTICIPANTS_DATA];
+      let filteredParticipants = [...PARTICIPANTS_DATA];
+      let activeDistId = 'all';
+
+      // Elements
+      const selectDist = document.getElementById('select-dist-filter') as HTMLSelectElement | null;
+      const inputSearch = document.getElementById('input-search-players') as HTMLInputElement | null;
+      const selectStatus = document.getElementById('select-status-filter') as HTMLSelectElement | null;
+      const selectAge = document.getElementById('select-age-filter') as HTMLSelectElement | null;
+      const selectSort = document.getElementById('select-sort-filter') as HTMLSelectElement | null;
+      const tbody = document.getElementById('tbody-players');
+      const labelCount = document.getElementById('label-table-count');
+
+      // Banner elements
+      const pageTitle = document.getElementById('page-dist-title');
+      const pageBadge = document.getElementById('page-dist-badge');
+      const pageSubtitle = document.getElementById('page-dist-subtitle');
+      const bannerName = document.getElementById('banner-dist-name');
+      const bannerStatus = document.getElementById('banner-dist-status');
+      const bannerLocation = document.getElementById('banner-dist-location');
+      const bannerDates = document.getElementById('banner-dist-dates');
+
+      // KPI elements
+      const kpiTotal = document.getElementById('kpi-total-players');
+      const kpiRate = document.getElementById('kpi-completion-rate');
+      const kpiRatio = document.getElementById('kpi-completed-ratio');
+      const kpiAvg = document.getElementById('kpi-avg-score');
+
+      // Update KPIs & Distribution Banner
+      function updateHeaderAndKpis(distId: string) {
+        if (distId === 'all') {
+          if (pageTitle) pageTitle.textContent = 'Data Seluruh Peserta Kuis';
+          if (pageBadge) {
+            pageBadge.textContent = 'SEMUA DISTRIBUSI';
+            pageBadge.className = 'badge-dist-all font-mono';
+          }
+          if (pageSubtitle) {
+            pageSubtitle.textContent =
+              'Daftar rekaman partisipasi, verifikasi kepatuhan 21+, demografi domisili, dan skor akhir per distribusi kampanye.';
+          }
+          if (bannerName) bannerName.textContent = 'Seluruh Kampanye & Roadshow Nusantara';
+          if (bannerStatus) {
+            bannerStatus.textContent = 'TERINTEGRASI';
+            bannerStatus.className = 'dist-meta-status-chip badge-dist-active';
+          }
+          if (bannerLocation) bannerLocation.textContent = 'Mencakup seluruh booth event offline & activation channel';
+          if (bannerDates) bannerDates.textContent = 'Jadwal Kampanye 2026';
+
+          const total = allParticipants.length;
+          const completed = allParticipants.filter((p) => p.status.includes('Selesai')).length;
+          const avg = (allParticipants.reduce((a, b) => a + b.score, 0) / (total || 1)).toFixed(1);
+          const rate = ((completed / (total || 1)) * 100).toFixed(1) + '%';
+
+          if (kpiTotal) kpiTotal.textContent = String(total);
+          if (kpiRate) kpiRate.textContent = rate;
+          if (kpiRatio) kpiRatio.textContent = `${completed}/${total} Selesai`;
+          if (kpiAvg) kpiAvg.textContent = avg;
+        } else {
+          const dist = DISTRIBUTIONS_DATA.find((d) => d.id === distId);
+          const distParticipants = allParticipants.filter((p) => p.distId === distId);
+
+          if (dist) {
+            if (pageTitle) pageTitle.textContent = dist.name;
+            if (pageBadge) {
+              pageBadge.textContent = dist.id;
+              pageBadge.className = 'badge-dist-id font-mono';
+            }
+            if (pageSubtitle) pageSubtitle.textContent = dist.description;
+            if (bannerName) bannerName.textContent = dist.name;
+            if (bannerStatus) {
+              bannerStatus.textContent = dist.statusLabel.toUpperCase();
+              bannerStatus.className = `dist-meta-status-chip ${
+                dist.status === 'active'
+                  ? 'badge-dist-active'
+                  : dist.status === 'scheduled'
+                    ? 'badge-dist-scheduled'
+                    : 'badge-dist-expired'
+              }`;
+            }
+            if (bannerLocation) bannerLocation.textContent = dist.entryLocation;
+            if (bannerDates) bannerDates.textContent = `Periode: ${dist.validityWindow}`;
+
+            const total = distParticipants.length;
+            const completed = distParticipants.filter((p) => p.status.includes('Selesai')).length;
+            const avg = total > 0 ? (distParticipants.reduce((a, b) => a + b.score, 0) / total).toFixed(1) : '0';
+            const rate = total > 0 ? ((completed / total) * 100).toFixed(1) + '%' : '0%';
+
+            if (kpiTotal) kpiTotal.textContent = String(dist.participantsCount || total);
+            if (kpiRate) kpiRate.textContent = dist.completionRate || rate;
+            if (kpiRatio) kpiRatio.textContent = `${completed}/${total} Selesai`;
+            if (kpiAvg) kpiAvg.textContent = String(dist.avgScore || avg);
+          }
+        }
+      }
+
+      // Render Table Rows
+      function renderTable(list: any[]) {
+        if (!tbody) return;
+
+        if (labelCount) {
+          labelCount.textContent = `Menampilkan ${list.length} dari ${allParticipants.length} peserta`;
+        }
+
+        if (list.length === 0) {
+          tbody.innerHTML = `
+            <tr>
+              <td colspan="10" class="empty-state-cell">
+                <div class="empty-state-wrap">
+                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                  </svg>
+                  <p class="empty-title">Tidak ada data peserta yang cocok</p>
+                  <span class="empty-desc">Coba sesuaikan kata kunci pencarian atau filter status/distribusi yang dipilih.</span>
+                </div>
+              </td>
+            </tr>
+          `;
+          return;
+        }
+
+        tbody.innerHTML = list
+          .map((p, idx) => {
+            const scoreBadgeClass =
+              p.score >= 80 ? 'score-high' : p.score >= 60 ? 'score-mid' : p.score >= 40 ? 'score-fair' : 'score-low';
+            const statusClass = p.status.includes('Selesai') ? 'badge-status-done' : 'badge-status-dropout';
+
+            return `
+              <tr>
+                <td class="td-no" style="text-align: center; width: 60px;">
+                  <span class="col-num-badge font-mono" style="display: inline-flex; align-items: center; justify-content: center; margin: 0 auto; min-width: 28px; width: 28px; height: 24px; text-align: center;">${idx + 1}</span>
+                </td>
+                <td class="tabular-nums text-muted text-xs">${p.time}</td>
+                <td class="font-bold text-dark">${p.name}</td>
+                <td>
+                  <div class="dist-cell-wrap">
+                    <span class="dist-mini-badge">${p.distId}</span>
+                    <span class="dist-mini-name">${p.distName}</span>
+                  </div>
+                </td>
+                <td><span class="age-chip">${p.ageBand}</span></td>
+                <td>${p.domicile}</td>
+                <td class="text-muted text-xs">${p.occupation}</td>
+                <td><span class="brand-chip">${p.currentBrand}</span></td>
+                <td style="text-align: center;"><span class="score-pill ${scoreBadgeClass}">${p.score} poin</span></td>
+                <td style="text-align: center;"><span class="${statusClass}">${p.status}</span></td>
+              </tr>
+            `;
+          })
+          .join('');
+      }
+
+      // Apply Filters
+      function applyFilters() {
+        const q = (inputSearch?.value || '').trim().toLowerCase();
+        const distFilter = selectDist?.value || 'all';
+        const statusFilter = selectStatus?.value || 'all';
+        const ageFilter = selectAge?.value || 'all';
+        const sortFilter = selectSort?.value || 'time-desc';
+
+        activeDistId = distFilter;
+        updateHeaderAndKpis(distFilter);
+
+        filteredParticipants = allParticipants.filter((p) => {
+          // Distribution match
+          if (distFilter !== 'all' && p.distId !== distFilter) return false;
+
+          // Status match
+          if (statusFilter === 'Selesai' && !p.status.includes('Selesai')) return false;
+          if (statusFilter === 'Sempurna' && p.score !== 100) return false;
+          if (statusFilter === 'Drop-out' && !p.status.includes('Drop-out')) return false;
+
+          // Age match
+          if (ageFilter !== 'all' && !p.ageBand.includes(ageFilter)) return false;
+
+          // Search query match
+          if (q) {
+            const matchName = p.name.toLowerCase().includes(q);
+            const matchDom = p.domicile.toLowerCase().includes(q);
+            const matchOcc = p.occupation.toLowerCase().includes(q);
+            const matchBrand = p.currentBrand.toLowerCase().includes(q);
+            const matchId = p.id.toLowerCase().includes(q);
+            if (!matchName && !matchDom && !matchOcc && !matchBrand && !matchId) return false;
+          }
+
+          return true;
+        });
+
+        // Apply Sorting
+        if (sortFilter === 'time-desc') {
+          filteredParticipants.sort((a, b) => b.timestamp - a.timestamp);
+        } else if (sortFilter === 'time-asc') {
+          filteredParticipants.sort((a, b) => a.timestamp - b.timestamp);
+        } else if (sortFilter === 'score-desc') {
+          filteredParticipants.sort((a, b) => b.score - a.score || b.timestamp - a.timestamp);
+        } else if (sortFilter === 'score-asc') {
+          filteredParticipants.sort((a, b) => a.score - b.score || b.timestamp - a.timestamp);
+        } else if (sortFilter === 'name-asc') {
+          filteredParticipants.sort((a, b) => a.name.localeCompare(b.name));
+        }
+
+        renderTable(filteredParticipants);
+      }
+
+      // Trigger CSV Export
+      function exportToCSV() {
+        if (!filteredParticipants || filteredParticipants.length === 0) {
+          showToast('Tidak ada data peserta untuk diekspor.');
+          return;
+        }
+
+        const headers = [
+          'No',
+          'Waktu Bermain',
+          'Nama Peserta',
+          'ID Distribusi',
+          'Nama Distribusi / Event',
+          'Rentang Usia',
+          'Kota Domisili',
+          'Bidang Pekerjaan',
+          'Merek Rokok Saat Ini',
+          'Skor Kuis (Maks 100)',
+          'Status Sesi',
+        ];
+
+        const escapeCSV = (val: any) => `"${String(val ?? '').replace(/"/g, '""')}"`;
+
+        const rows = filteredParticipants.map((p, idx) =>
+          [
+            idx + 1,
+            p.time,
+            p.name,
+            p.distId,
+            p.distName,
+            p.ageBand,
+            p.domicile,
+            p.occupation,
+            p.currentBrand,
+            p.score,
+            p.status,
+          ]
+            .map(escapeCSV)
+            .join(',')
+        );
+
+        const csvContent = '\uFEFF' + [headers.map(escapeCSV).join(','), ...rows].join('\r\n');
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+
+        const now = new Date();
+        const dateStr = now.toISOString().slice(0, 10).replace(/-/g, '');
+        const filename =
+          activeDistId === 'all'
+            ? `Data_Peserta_Semua_Distribusi_${dateStr}.csv`
+            : `Data_Peserta_${activeDistId}_${dateStr}.csv`;
+
+        link.setAttribute('href', url);
+        link.setAttribute('download', filename);
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
+        showToast(`Berhasil mengunduh ${filteredParticipants.length} data peserta (${filename})`);
+      }
+
+      // Attach Event Listeners
+      selectDist?.addEventListener('change', applyFilters);
+      inputSearch?.addEventListener('input', applyFilters);
+      selectStatus?.addEventListener('change', applyFilters);
+      selectAge?.addEventListener('change', applyFilters);
+      selectSort?.addEventListener('change', applyFilters);
+      document.getElementById('btn-export-csv')?.addEventListener('click', exportToCSV);
+      document.getElementById('btn-export-csv-bottom')?.addEventListener('click', exportToCSV);
+      document.getElementById('btn-refresh')?.addEventListener('click', () => {
+        applyFilters();
+        showToast('Data peserta berhasil disegarkan.');
+      });
+
+      // Handle URL Parameter on initial load: ?dist=DIST-SBY-01
+      const urlParams = new URLSearchParams(window.location.search);
+      const distFromUrl = urlParams.get('dist');
+      if (distFromUrl && selectDist) {
+        const optionExists = Array.from(selectDist.options).some((opt) => opt.value === distFromUrl);
+        if (optionExists) {
+          selectDist.value = distFromUrl;
+        }
+      }
+
+      // Initial Filter Application
+      applyFilters();
+    </script>
+
+    <!-- Page Specific Styles -->
+    <style>
+      :root {
+        --dash-border: #e2e8f0;
+        --dash-border-subtle: #f1f5f9;
+        --dash-border-hover: #cbd5e1;
+        --dash-bg-canvas: #f8fafc;
+        --dash-bg-surface: #ffffff;
+        --dash-text-main: #0f172a;
+        --dash-text-body: #334155;
+        --dash-text-muted: #64748b;
+        --dash-gold: #967126;
+        --dash-gold-hover: #7d5c1c;
+        --dash-gold-light: #faf7ee;
+        --dash-gold-border: #f0deb0;
+        --radius-sm: 4px;
+        --radius-md: 6px;
+        --radius-lg: 8px;
+        --radius-xl: 12px;
+        --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.04);
+        --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+      }
+
+      .dashboard-wrapper {
+        min-height: 100vh;
+        background-color: var(--dash-bg-canvas);
+        color: var(--dash-text-main);
+        display: flex;
+        flex-direction: column;
+        font-family: var(--font-body);
+        width: 100%;
+      }
+
+      /* Header */
+      .dash-header {
+        background: #ffffff;
+        border-bottom: 1px solid var(--dash-border);
+        position: sticky;
+        top: 0;
+        z-index: 40;
+        width: 100%;
+        height: 58px;
+        box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.02);
+      }
+
+      .dash-header-inner {
+        height: 100%;
+        padding: 0 1.25rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .dash-brand {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+      }
+
+      .btn-sidebar-toggle {
+        display: none;
+        background: none;
+        border: none;
+        color: var(--dash-text-main);
+        cursor: pointer;
+        padding: 6px;
+        border-radius: var(--radius-sm);
+      }
+
+      .brand-link {
+        display: flex;
+        align-items: center;
+      }
+
+      .dash-logo {
+        height: 40px;
+        width: auto;
+        object-fit: contain;
+      }
+
+      .dash-actions {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .btn-dash-action {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        background: #ffffff;
+        color: var(--dash-text-body);
+        border: 1px solid var(--dash-border);
+        padding: 0.4rem 0.75rem;
+        font-size: 0.78rem;
+        font-weight: 500;
+        border-radius: var(--radius-md);
+        text-decoration: none;
+        cursor: pointer;
+        transition: all 0.15s ease;
+      }
+
+      .btn-dash-action:hover {
+        background: #f8fafc;
+        border-color: var(--dash-border-hover);
+        color: var(--dash-text-main);
+      }
+
+      .btn-dash-primary {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        background: var(--dash-gold);
+        color: #ffffff;
+        border: 1px solid var(--dash-gold);
+        padding: 0.4rem 0.85rem;
+        font-size: 0.78rem;
+        font-weight: 600;
+        border-radius: var(--radius-md);
+        text-decoration: none;
+        cursor: pointer;
+        transition: all 0.15s ease;
+      }
+
+      .btn-dash-primary:hover {
+        background: var(--dash-gold-hover);
+        border-color: var(--dash-gold-hover);
+      }
+
+      /* Layout */
+      .dash-layout {
+        display: flex;
+        flex: 1;
+        width: 100%;
+      }
+
+      .dash-sidebar {
+        width: 240px;
+        background: #ffffff;
+        border-right: 1px solid var(--dash-border);
+        flex-shrink: 0;
+      }
+
+      .sidebar-content {
+        padding: 1.25rem 0.75rem;
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+      }
+
+      .sidebar-heading {
+        font-size: 0.65rem;
+        font-weight: 700;
+        color: var(--dash-text-muted);
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        padding: 0 0.5rem;
+        margin-bottom: 0.4rem;
+        display: block;
+      }
+
+      .sidebar-nav {
+        display: flex;
+        flex-direction: column;
+        gap: 0.2rem;
+      }
+
+      .sidebar-item {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        padding: 0.5rem 0.65rem;
+        color: var(--dash-text-body);
+        text-decoration: none;
+        font-size: 0.8rem;
+        font-weight: 500;
+        border-radius: var(--radius-md);
+        transition: all 0.12s ease;
+      }
+
+      .sidebar-item:hover {
+        background: #f1f5f9;
+        color: var(--dash-text-main);
+      }
+
+      .sidebar-item.active {
+        background: var(--dash-gold-light);
+        color: var(--dash-gold);
+        font-weight: 600;
+        border-left: 3px solid var(--dash-gold);
+      }
+
+      .sidebar-badge {
+        margin-left: auto;
+        font-size: 0.68rem;
+        padding: 0.1rem 0.4rem;
+        border-radius: 999px;
+        background: #e2e8f0;
+        color: #475569;
+        font-family: var(--font-mono);
+      }
+
+      .sidebar-item.active .sidebar-badge {
+        background: var(--dash-gold);
+        color: #ffffff;
+      }
+
+      /* Main Area */
+      .dash-main {
+        flex: 1;
+        padding: 1.5rem 2rem 3rem 2rem;
+        max-width: 1360px;
+        margin: 0 auto;
+        width: 100%;
+      }
+
+      /* Breadcrumb */
+      .breadcrumb-bar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 1.25rem;
+      }
+
+      .breadcrumb-items {
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+        font-size: 0.78rem;
+      }
+
+      .breadcrumb-link {
+        color: var(--dash-text-muted);
+        text-decoration: none;
+      }
+
+      .breadcrumb-link:hover {
+        color: var(--dash-gold);
+      }
+
+      .breadcrumb-separator {
+        color: #cbd5e1;
+      }
+
+      .breadcrumb-current {
+        color: var(--dash-text-main);
+        font-weight: 600;
+      }
+
+      .btn-back-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        font-size: 0.75rem;
+        font-weight: 500;
+        color: var(--dash-gold);
+        text-decoration: none;
+        padding: 0.25rem 0.5rem;
+        border-radius: var(--radius-sm);
+        transition: background 0.15s ease;
+      }
+
+      .btn-back-link:hover {
+        background: var(--dash-gold-light);
+      }
+
+      /* Page Header */
+      .dash-view-header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 1.5rem;
+        margin-bottom: 1.25rem;
+      }
+
+      .view-title-wrap {
+        display: flex;
+        flex-direction: column;
+        gap: 0.3rem;
+      }
+
+      .view-title-badge-row {
+        display: flex;
+        align-items: center;
+        gap: 0.65rem;
+      }
+
+      .view-main-title {
+        font-size: 1.35rem;
+        font-weight: 700;
+        color: var(--dash-text-main);
+        letter-spacing: -0.01em;
+      }
+
+      .view-subtitle {
+        font-size: 0.82rem;
+        color: var(--dash-text-muted);
+        max-width: 680px;
+        line-height: 1.45;
+      }
+
+      .badge-dist-all {
+        font-size: 0.68rem;
+        font-weight: 700;
+        padding: 0.2rem 0.55rem;
+        background: #e2e8f0;
+        color: #334155;
+        border-radius: var(--radius-sm);
+      }
+
+      .badge-dist-id {
+        font-size: 0.68rem;
+        font-weight: 700;
+        padding: 0.2rem 0.55rem;
+        background: var(--dash-gold-light);
+        color: var(--dash-gold);
+        border: 1px solid var(--dash-gold-border);
+        border-radius: var(--radius-sm);
+      }
+
+      /* Distribution Selector dropdown in header */
+      .view-header-right {
+        display: flex;
+        align-items: center;
+      }
+
+      .dist-select-picker-wrap {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+      }
+
+      .select-picker-label {
+        font-size: 0.7rem;
+        font-weight: 600;
+        color: var(--dash-text-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+
+      .select-picker-input {
+        background: #ffffff;
+        border: 1.5px solid var(--dash-gold-border);
+        color: var(--dash-text-main);
+        font-size: 0.82rem;
+        font-weight: 600;
+        padding: 0.45rem 0.75rem;
+        border-radius: var(--radius-md);
+        outline: none;
+        cursor: pointer;
+        box-shadow: var(--shadow-sm);
+        transition: border-color 0.15s ease;
+      }
+
+      .select-picker-input:focus {
+        border-color: var(--dash-gold);
+      }
+
+      /* Active Distribution Meta Banner */
+      .dist-meta-banner {
+        background: #ffffff;
+        border: 1px solid var(--dash-border);
+        border-left: 4px solid var(--dash-gold);
+        border-radius: var(--radius-lg);
+        padding: 0.9rem 1.25rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+        box-shadow: var(--shadow-sm);
+      }
+
+      .dist-meta-left {
+        display: flex;
+        align-items: center;
+        gap: 0.85rem;
+      }
+
+      .dist-meta-icon {
+        width: 38px;
+        height: 38px;
+        border-radius: var(--radius-md);
+        background: var(--dash-gold-light);
+        color: var(--dash-gold);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+
+      .dist-meta-details {
+        display: flex;
+        flex-direction: column;
+        gap: 0.15rem;
+      }
+
+      .dist-meta-name-row {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .dist-meta-name {
+        font-size: 0.92rem;
+        font-weight: 700;
+        color: var(--dash-text-main);
+      }
+
+      .dist-meta-status-chip {
+        font-size: 0.62rem;
+        font-weight: 700;
+        padding: 0.1rem 0.4rem;
+        border-radius: var(--radius-sm);
+        letter-spacing: 0.04em;
+      }
+
+      .badge-dist-active {
+        background: #ecfdf5;
+        color: #047857;
+        border: 1px solid #a7f3d0;
+      }
+
+      .badge-dist-scheduled {
+        background: #eff6ff;
+        color: #1d4ed8;
+        border: 1px solid #bfdbfe;
+      }
+
+      .badge-dist-expired {
+        background: #f8fafc;
+        color: #64748b;
+        border: 1px solid #cbd5e1;
+      }
+
+      .dist-meta-sub-row {
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+        font-size: 0.75rem;
+        color: var(--dash-text-muted);
+      }
+
+      .meta-dot {
+        color: #cbd5e1;
+      }
+
+      /* KPI Grid */
+      .kpi-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+      }
+
+      .kpi-card {
+        background: #ffffff;
+        border: 1px solid var(--dash-border);
+        border-radius: var(--radius-lg);
+        padding: 1rem 1.15rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.35rem;
+        box-shadow: var(--shadow-sm);
+      }
+
+      .kpi-card-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .kpi-card-label {
+        font-size: 0.72rem;
+        font-weight: 600;
+        color: var(--dash-text-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+      }
+
+      .kpi-icon-wrap {
+        color: var(--dash-gold);
+      }
+
+      .kpi-value-row {
+        display: flex;
+        align-items: baseline;
+        gap: 0.45rem;
+      }
+
+      .kpi-value {
+        font-size: 1.6rem;
+        font-weight: 700;
+        color: var(--dash-text-main);
+        line-height: 1.1;
+      }
+
+      .kpi-sub-unit {
+        font-size: 0.78rem;
+        color: var(--dash-text-muted);
+      }
+
+      .kpi-badge {
+        font-size: 0.65rem;
+        font-weight: 600;
+        padding: 0.1rem 0.35rem;
+        border-radius: var(--radius-sm);
+      }
+
+      .kpi-badge-positive {
+        background: #ecfdf5;
+        color: #047857;
+      }
+
+      .kpi-desc {
+        font-size: 0.7rem;
+        color: var(--dash-text-muted);
+        line-height: 1.35;
+      }
+
+      /* Main Card & Toolbar */
+      .dash-card {
+        background: #ffffff;
+        border: 1px solid var(--dash-border);
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-sm);
+        overflow: hidden;
+      }
+
+      .table-toolbar {
+        padding: 0.85rem 1.25rem;
+        background: #ffffff;
+        border-bottom: 1px solid var(--dash-border);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        flex-wrap: wrap;
+      }
+
+      .toolbar-left {
+        display: flex;
+        align-items: center;
+        gap: 0.65rem;
+        flex-wrap: wrap;
+        flex: 1;
+      }
+
+      .search-input-wrap {
+        position: relative;
+        min-width: 280px;
+        flex: 1;
+        max-width: 380px;
+      }
+
+      .search-icon {
+        position: absolute;
+        left: 0.75rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--dash-text-muted);
+      }
+
+      .input-search-dash {
+        width: 100%;
+        padding: 0.42rem 0.75rem 0.42rem 2.1rem;
+        border: 1px solid var(--dash-border);
+        border-radius: var(--radius-md);
+        font-size: 0.8rem;
+        background: #ffffff;
+        color: var(--dash-text-main);
+        outline: none;
+      }
+
+      .input-search-dash:focus {
+        border-color: var(--dash-gold);
+        box-shadow: 0 0 0 2px var(--dash-gold-light);
+      }
+
+      .filter-select-input {
+        padding: 0.42rem 0.65rem;
+        border: 1px solid var(--dash-border);
+        border-radius: var(--radius-md);
+        font-size: 0.78rem;
+        background: #ffffff;
+        color: var(--dash-text-body);
+        outline: none;
+        cursor: pointer;
+      }
+
+      .toolbar-right {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+      }
+
+      .table-count-label {
+        font-size: 0.75rem;
+        font-weight: 500;
+        color: var(--dash-text-muted);
+      }
+
+      /* Table Styles */
+      .table-responsive {
+        width: 100%;
+        overflow-x: auto;
+      }
+
+      .dash-table {
+        width: 100%;
+        border-collapse: collapse;
+        text-align: left;
+        font-size: 0.78rem;
+      }
+
+      .dash-table thead th {
+        background: #f8fafc;
+        color: #475569;
+        font-size: 0.7rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        padding: 0.65rem 0.85rem;
+        border-bottom: 1px solid var(--dash-border);
+        white-space: nowrap;
+      }
+
+      :global(.dash-table thead th.th-no),
+      :global(.dash-table tbody td.td-no),
+      :global(.th-no),
+      :global(.td-no) {
+        width: 60px !important;
+        min-width: 60px !important;
+        max-width: 60px !important;
+        text-align: center !important;
+        vertical-align: middle !important;
+        padding-left: 0.25rem !important;
+        padding-right: 0.25rem !important;
+      }
+
+      :global(.col-num-badge) {
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        min-width: 28px !important;
+        width: 28px !important;
+        height: 24px !important;
+        padding: 0 4px !important;
+        font-family: var(--font-mono) !important;
+        font-size: 0.75rem !important;
+        font-weight: 700 !important;
+        color: #334155 !important;
+        background: #f1f5f9 !important;
+        border: 1px solid #cbd5e1 !important;
+        border-radius: var(--radius-sm) !important;
+        margin: 0 auto !important;
+        text-align: center !important;
+        box-shadow: 0 1px 1px rgba(0, 0, 0, 0.03) !important;
+      }
+
+      :global(.dash-table tbody td) {
+        padding: 0.7rem 0.85rem;
+        border-bottom: 1px solid var(--dash-border-subtle);
+        color: var(--dash-text-body);
+        vertical-align: middle;
+      }
+
+      :global(.dash-table tbody tr:hover) {
+        background-color: #fafbfc;
+      }
+
+      :global(.id-mono-chip) {
+        font-family: var(--font-mono);
+        font-size: 0.72rem;
+        padding: 0.15rem 0.4rem;
+        background: #f1f5f9;
+        color: #334155;
+        border-radius: var(--radius-sm);
+      }
+
+      :global(.dist-cell-wrap) {
+        display: flex;
+        flex-direction: column;
+        gap: 0.15rem;
+      }
+
+      :global(.dist-mini-badge) {
+        font-family: var(--font-mono);
+        font-size: 0.65rem;
+        font-weight: 700;
+        color: var(--dash-gold);
+      }
+
+      :global(.dist-mini-name) {
+        font-size: 0.72rem;
+        color: var(--dash-text-muted);
+        white-space: nowrap;
+      }
+
+      :global(.age-chip) {
+        display: inline-block;
+        padding: 0.15rem 0.45rem;
+        font-size: 0.7rem;
+        font-weight: 600;
+        color: #334155;
+        background: #f1f5f9;
+        border-radius: var(--radius-sm);
+        white-space: nowrap;
+      }
+
+      :global(.brand-chip) {
+        display: inline-block;
+        padding: 0.15rem 0.45rem;
+        font-size: 0.7rem;
+        font-weight: 600;
+        color: var(--dash-gold);
+        background: var(--dash-gold-light);
+        border: 1px solid var(--dash-gold-border);
+        border-radius: var(--radius-sm);
+        white-space: nowrap;
+      }
+
+      :global(.score-pill) {
+        display: inline-block;
+        padding: 0.2rem 0.55rem;
+        font-family: var(--font-mono);
+        font-size: 0.75rem;
+        font-weight: 700;
+        border-radius: 999px;
+      }
+
+      :global(.score-high) {
+        background: #fef3c7;
+        color: #92400e;
+        border: 1px solid #fde68a;
+      }
+
+      :global(.score-mid) {
+        background: #ecfdf5;
+        color: #065f46;
+        border: 1px solid #a7f3d0;
+      }
+
+      :global(.score-fair) {
+        background: #eff6ff;
+        color: #1e40af;
+        border: 1px solid #bfdbfe;
+      }
+
+      :global(.score-low) {
+        background: #fef2f2;
+        color: #991b1b;
+        border: 1px solid #fecaca;
+      }
+
+      :global(.badge-status-done) {
+        display: inline-block;
+        padding: 0.15rem 0.45rem;
+        font-size: 0.68rem;
+        font-weight: 600;
+        background: #ecfdf5;
+        color: #047857;
+        border-radius: var(--radius-sm);
+      }
+
+      :global(.badge-status-dropout) {
+        display: inline-block;
+        padding: 0.15rem 0.45rem;
+        font-size: 0.68rem;
+        font-weight: 600;
+        background: #fef2f2;
+        color: #b91c1c;
+        border-radius: var(--radius-sm);
+      }
+
+      :global(.empty-state-cell) {
+        padding: 3rem 1.5rem;
+        text-align: center;
+      }
+
+      :global(.empty-state-wrap) {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+        color: var(--dash-text-muted);
+      }
+
+      .empty-title {
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: var(--dash-text-main);
+      }
+
+      .empty-desc {
+        font-size: 0.78rem;
+        color: var(--dash-text-muted);
+      }
+
+      /* Table Footer */
+      .table-footer-bar {
+        padding: 0.75rem 1.25rem;
+        background: #f8fafc;
+        border-top: 1px solid var(--dash-border);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        flex-wrap: wrap;
+      }
+
+      /* Toast */
+      .toast-notify {
+        position: fixed;
+        bottom: 1.5rem;
+        right: 1.5rem;
+        background: #0f172a;
+        color: #ffffff;
+        padding: 0.75rem 1.15rem;
+        font-size: 0.8rem;
+        font-weight: 500;
+        border-radius: var(--radius-md);
+        box-shadow: var(--shadow-md);
+        z-index: 100;
+      }
+
+      /* Responsive */
+      @media (max-width: 1024px) {
+        .kpi-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .dash-view-header {
+          flex-direction: column;
+          align-items: stretch;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .kpi-grid {
+          grid-template-columns: 1fr;
+        }
+        .dash-sidebar {
+          position: fixed;
+          top: 58px;
+          bottom: 0;
+          left: -240px;
+          z-index: 50;
+          transition: left 0.2s ease;
+          box-shadow: 4px 0 12px rgba(0, 0, 0, 0.08);
+        }
+        .dash-sidebar.open {
+          left: 0;
+        }
+        .btn-sidebar-toggle {
+          display: flex;
+        }
+        .dash-main {
+          padding: 1rem;
+        }
+        .dist-meta-banner {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+        .table-toolbar {
+          flex-direction: column;
+          align-items: stretch;
+        }
+        .toolbar-left {
+          flex-direction: column;
+          width: 100%;
+        }
+        .search-input-wrap {
+          min-width: unset;
+          max-width: unset;
+          width: 100%;
+        }
+      }
+    </style>
+  </body>
+</html>

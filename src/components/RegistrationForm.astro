@@ -118,15 +118,6 @@ import { AGE_BANDS, DOMICILES, OCCUPATIONS, CURRENT_BRANDS } from '../data/regis
 </section>
 
 <style>
-  .stage-card {
-    background: var(--surface-card);
-    border: 1.5px solid var(--border-card);
-    border-radius: var(--radius-card);
-    padding: var(--space-6);
-    box-shadow: var(--card-shadow);
-    animation: fadeIn 0.3s ease;
-  }
-
   .step-badge {
     font-size: 0.75rem;
     font-weight: 700;
@@ -233,7 +224,7 @@ import { AGE_BANDS, DOMICILES, OCCUPATIONS, CURRENT_BRANDS } from '../data/regis
   .custom-checkbox {
     width: 20px;
     height: 20px;
-    border-radius: 4px;
+    border-radius: 0px;
     border: 2px solid var(--color-gold-500);
     background: var(--surface-input);
     margin-top: 2px;
@@ -279,7 +270,7 @@ import { AGE_BANDS, DOMICILES, OCCUPATIONS, CURRENT_BRANDS } from '../data/regis
     background: var(--color-error-bg);
     border: 1px solid var(--color-error-border);
     padding: 4px 8px;
-    border-radius: 6px;
+    border-radius: 0px;
   }
 
   .privacy-note {
@@ -302,14 +293,16 @@ import { AGE_BANDS, DOMICILES, OCCUPATIONS, CURRENT_BRANDS } from '../data/regis
   }
 
   .btn-primary {
+    position: relative;
+    overflow: hidden;
     width: 100%;
     min-height: 48px;
-    background: linear-gradient(135deg, var(--color-gold-500) 0%, #a87e2b 100%);
-    color: var(--color-brown-950);
+    background: linear-gradient(135deg, #e5bf65 0%, #c49a45 45%, #9e7523 100%);
+    color: #1e110a;
     font-family: var(--font-body);
     font-size: 1rem;
     font-weight: 700;
-    border: none;
+    border: 1px solid rgba(255, 235, 175, 0.5);
     border-radius: var(--radius-button);
     display: flex;
     align-items: center;
@@ -317,17 +310,55 @@ import { AGE_BANDS, DOMICILES, OCCUPATIONS, CURRENT_BRANDS } from '../data/regis
     gap: var(--space-2);
     cursor: pointer;
     margin-top: var(--space-2);
-    box-shadow: 0 4px 14px rgba(196, 154, 69, 0.35);
+    box-shadow: 0 4px 16px rgba(196, 154, 69, 0.35);
     transition: transform 0.15s ease, filter 0.15s ease, box-shadow 0.15s ease;
   }
 
+  .btn-primary::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -120%;
+    width: 60%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.2) 30%,
+      rgba(255, 255, 255, 0.8) 50%,
+      rgba(255, 255, 255, 0.2) 70%,
+      transparent 100%
+    );
+    transform: skewX(-25deg);
+    animation: goldButtonShine 3.5s ease-in-out infinite;
+    pointer-events: none;
+  }
+
   .btn-primary:hover {
-    filter: brightness(1.08);
-    box-shadow: 0 6px 16px rgba(196, 154, 69, 0.4);
+    filter: brightness(1.1);
+    box-shadow: 0 6px 20px rgba(196, 154, 69, 0.5), 0 0 12px rgba(255, 235, 175, 0.35);
   }
 
   .btn-primary:active {
     transform: scale(0.98);
+  }
+
+  @keyframes goldButtonShine {
+    0%, 60% {
+      left: -120%;
+      opacity: 0;
+    }
+    65% {
+      opacity: 1;
+    }
+    85% {
+      left: 160%;
+      opacity: 1;
+    }
+    86%, 100% {
+      left: 160%;
+      opacity: 0;
+    }
   }
 
   @keyframes fadeIn {

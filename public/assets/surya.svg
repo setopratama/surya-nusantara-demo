@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000" role="img" aria-labelledby="title desc">
+<title id="title">Geometric Sunburst Ornament</title>
+<desc id="desc">A perfectly symmetrical monochrome sun ornament made from connected geometric lines.</desc>
+<g fill="none" stroke="#000" stroke-linecap="square" stroke-linejoin="miter">
+<circle cx="500" cy="500" r="175" stroke-width="2.88"/>
+<circle cx="500" cy="500" r="193" stroke-width="1.60"/>
+<circle cx="500" cy="500" r="360" stroke-width="2.24"/>
+<path d="M500.00,302.00 L500.00,144.00" stroke-width="1.60"/>
+<path d="M575.77,317.07 L636.24,171.10" stroke-width="1.60"/>
+<path d="M640.01,359.99 L751.73,248.27" stroke-width="1.60"/>
+<path d="M682.93,424.23 L828.90,363.76" stroke-width="1.60"/>
+<path d="M698.00,500.00 L856.00,500.00" stroke-width="1.60"/>
+<path d="M682.93,575.77 L828.90,636.24" stroke-width="1.60"/>
+<path d="M640.01,640.01 L751.73,751.73" stroke-width="1.60"/>
+<path d="M575.77,682.93 L636.24,828.90" stroke-width="1.60"/>
+<path d="M500.00,698.00 L500.00,856.00" stroke-width="1.60"/>
+<path d="M424.23,682.93 L363.76,828.90" stroke-width="1.60"/>
+<path d="M359.99,640.01 L248.27,751.73" stroke-width="1.60"/>
+<path d="M317.07,575.77 L171.10,636.24" stroke-width="1.60"/>
+<path d="M302.00,500.00 L144.00,500.00" stroke-width="1.60"/>
+<path d="M317.07,424.23 L171.10,363.76" stroke-width="1.60"/>
+<path d="M359.99,359.99 L248.27,248.27" stroke-width="1.60"/>
+<path d="M424.23,317.07 L363.76,171.10" stroke-width="1.60"/>
+<path d="M543.00,312.00 L500.00,25.00 L457.00,312.00" stroke-width="2.56"/>
+<path d="M518.00,295.00 L500.00,65.00 L482.00,295.00" stroke-width="1.28"/>
+<path d="M663.34,397.47 L835.88,164.12 L602.53,336.66" stroke-width="2.56"/>
+<path d="M657.68,367.77 L807.59,192.41 L632.23,342.32" stroke-width="1.28"/>
+<path d="M688.00,543.00 L975.00,500.00 L688.00,457.00" stroke-width="2.56"/>
+<path d="M705.00,518.00 L935.00,500.00 L705.00,482.00" stroke-width="1.28"/>
+<path d="M602.53,663.34 L835.88,835.88 L663.34,602.53" stroke-width="2.56"/>
+<path d="M632.23,657.68 L807.59,807.59 L657.68,632.23" stroke-width="1.28"/>
+<path d="M457.00,688.00 L500.00,975.00 L543.00,688.00" stroke-width="2.56"/>
+<path d="M482.00,705.00 L500.00,935.00 L518.00,705.00" stroke-width="1.28"/>
+<path d="M336.66,602.53 L164.12,835.88 L397.47,663.34" stroke-width="2.56"/>
+<path d="M342.32,632.23 L192.41,807.59 L367.77,657.68" stroke-width="1.28"/>
+<path d="M312.00,457.00 L25.00,500.00 L312.00,543.00" stroke-width="2.56"/>
+<path d="M295.00,482.00 L65.00,500.00 L295.00,518.00" stroke-width="1.28"/>
+<path d="M397.47,336.66 L164.12,164.12 L336.66,397.47" stroke-width="2.56"/>
+<path d="M367.77,342.32 L192.41,192.41 L342.32,367.77" stroke-width="1.28"/>
+<path d="M500.00,255.00 L614.81,222.84 L673.24,326.76 L777.16,385.19 L745.00,500.00 L777.16,614.81 L673.24,673.24 L614.81,777.16 L500.00,745.00 L385.19,777.16 L326.76,673.24 L222.84,614.81 L255.00,500.00 L222.84,385.19 L326.76,326.76 L385.19,222.84 Z" stroke-width="1.60"/>
+<circle cx="500" cy="500" r="158" stroke-width="2.56"/>
+<circle cx="500" cy="500" r="142" stroke-width="1.28"/>
+</g>
+</svg>

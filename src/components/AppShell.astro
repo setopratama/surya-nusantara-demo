@@ -14,6 +14,8 @@ const { title = 'Kuis Dedikasi Di Balik Rasa — Surya Nusantara' } = Astro.prop
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta name="description" content="Kuis Dedikasi Di Balik Rasa - Pengalaman interaktif Surya Nusantara" />
+    <meta name="robots" content="noindex, nofollow, noarchive, nosnippet" />
+    <meta name="googlebot" content="noindex, nofollow, noarchive, nosnippet" />
     <title>{title}</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -26,27 +28,17 @@ const { title = 'Kuis Dedikasi Di Balik Rasa — Surya Nusantara' } = Astro.prop
   <body>
     <div class="app-wrapper">
       <header class="app-header" role="banner">
-        <div class="header-inner">
-          <div class="brand-badge">
-            <div class="brand-crest" aria-hidden="true">
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="12" r="5"></circle>
-                <line x1="12" y1="1" x2="12" y2="3"></line>
-                <line x1="12" y1="21" x2="12" y2="23"></line>
-                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-                <line x1="1" y1="12" x2="3" y2="12"></line>
-                <line x1="21" y1="12" x2="23" y2="12"></line>
-                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-              </svg>
-            </div>
-            <div class="brand-text">
-              <span class="brand-name">SURYA NUSANTARA</span>
-              <span class="brand-tagline">DEDIKASI DI BALIK RASA</span>
-            </div>
-          </div>
+        <div class="brand-masthead">
+          <img
+            src="/assets/logo_gold.png"
+            alt="Surya Nusantara — Dedikasi Di Balik Rasa"
+            class="brand-hero-logo"
+            width="1536"
+            height="1024"
+            loading="eager"
+          />
         </div>
+        <div class="brand-divider" aria-hidden="true"></div>
       </header>
 
       <main class="app-main" id="main-content" role="main">
@@ -59,7 +51,8 @@ const { title = 'Kuis Dedikasi Di Balik Rasa — Surya Nusantara' } = Astro.prop
           <span class="warning-text">KHUSUS PEROKOK DEWASA USIA 21 TAHUN ATAU LEBIH. TIDAK UNTUK DIJUAL KEPADA ANAK-ANAK &amp; WANITA HAMIL.</span>
         </div>
         <p class="demo-disclaimer">
-          Demo Interaktif — Konsep Consumer Engagement Kuis Dedikasi Di Balik Rasa
+          Demo Interaktif — Konsep Consumer Engagement Kuis Dedikasi Di Balik Rasa &bull;
+          <a href="/dashboard" class="footer-dash-link">Dashboard Analitik</a>
         </p>
       </footer>
     </div>
@@ -74,63 +67,71 @@ const { title = 'Kuis Dedikasi Di Balik Rasa — Surya Nusantara' } = Astro.prop
     flex-direction: column;
     background-color: var(--bg-app);
     background-image: var(--bg-gradient);
+    background-position: center top;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
     position: relative;
     overflow-x: hidden;
   }
 
   .app-header {
-    padding: var(--space-4) var(--space-4);
-    border-bottom: 1px solid var(--header-border);
-    background: var(--header-bg);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    position: sticky;
-    top: 0;
+    width: 100%;
+    background: transparent;
+    position: relative;
     z-index: 40;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
   }
 
-  .header-inner {
+  .brand-masthead {
+    width: 100%;
     max-width: var(--content-max-width);
     margin: 0 auto;
+    padding: var(--space-5) var(--space-4) var(--space-3);
     display: flex;
     justify-content: center;
     align-items: center;
   }
 
-  .brand-badge {
-    display: flex;
-    align-items: center;
-    gap: var(--space-3);
+  .brand-hero-logo {
+    height: 96px;
+    width: auto;
+    max-width: 250px;
+    object-fit: contain;
+    display: block;
+    filter: drop-shadow(0 6px 20px rgba(196, 154, 69, 0.45)) drop-shadow(0 2px 6px rgba(0, 0, 0, 0.9));
+    transition: transform 0.25s ease, filter 0.25s ease;
   }
 
-  .brand-crest {
-    color: var(--color-gold-500);
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  .brand-hero-logo:hover {
+    transform: translateY(-2px) scale(1.02);
+    filter: drop-shadow(0 8px 26px rgba(196, 154, 69, 0.6)) drop-shadow(0 3px 8px rgba(0, 0, 0, 0.95));
   }
 
-  .brand-text {
-    display: flex;
-    flex-direction: column;
-    text-align: left;
+  .brand-divider {
+    width: 100%;
+    max-width: var(--content-max-width);
+    margin: 0 auto;
+    height: 1.5px;
+    background: linear-gradient(
+      90deg,
+      rgba(196, 154, 69, 0) 0%,
+      rgba(196, 154, 69, 0.5) 20%,
+      rgba(226, 196, 123, 0.95) 50%,
+      rgba(196, 154, 69, 0.5) 80%,
+      rgba(196, 154, 69, 0) 100%
+    );
+    box-shadow: 0 1px 8px rgba(196, 154, 69, 0.35);
   }
 
-  .brand-name {
-    font-family: var(--font-display);
-    font-size: 1.25rem;
-    font-weight: 700;
-    letter-spacing: 0.12em;
-    color: var(--header-text);
-    line-height: 1.15;
-  }
+  @media (min-width: 768px) {
+    .brand-masthead {
+      padding: var(--space-6) var(--space-4) var(--space-4);
+    }
 
-  .brand-tagline {
-    font-size: 0.68rem;
-    font-weight: 700;
-    letter-spacing: 0.18em;
-    color: var(--header-tagline);
+    .brand-hero-logo {
+      height: 125px;
+      max-width: 300px;
+    }
   }
 
   .app-main {
@@ -158,7 +159,7 @@ const { title = 'Kuis Dedikasi Di Balik Rasa — Surya Nusantara' } = Astro.prop
     gap: var(--space-2);
     background: rgba(0, 0, 0, 0.35);
     border: 1px solid var(--border-subtle);
-    border-radius: 9999px;
+    border-radius: 0px;
     padding: var(--space-1) var(--space-3);
     margin-bottom: var(--space-2);
     max-width: 100%;
@@ -170,7 +171,7 @@ const { title = 'Kuis Dedikasi Di Balik Rasa — Surya Nusantara' } = Astro.prop
     font-size: 0.75rem;
     font-weight: 700;
     padding: 2px 6px;
-    border-radius: 4px;
+    border-radius: 0px;
     letter-spacing: 0.05em;
   }
 
@@ -189,6 +190,18 @@ const { title = 'Kuis Dedikasi Di Balik Rasa — Surya Nusantara' } = Astro.prop
     font-weight: 500;
     margin-top: 2px;
     opacity: 0.85;
+  }
+
+  .footer-dash-link {
+    color: var(--color-gold-300);
+    text-decoration: underline;
+    font-weight: 600;
+    margin-left: 4px;
+    transition: color 0.15s ease;
+  }
+
+  .footer-dash-link:hover {
+    color: #ffffff;
   }
 
   @media (min-width: 768px) {

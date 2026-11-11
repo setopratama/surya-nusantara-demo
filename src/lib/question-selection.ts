@@ -44,31 +44,42 @@ export function shuffleQuestionOptions(question: Question): Question {
   };
 }
 
+export interface SessionSelectionConfig {
+  generalCount?: number;
+  brandCount?: number;
+}
+
 /**
- * Selects exactly 10 questions for a game session:
- * - 7 unique questions randomly from the general pool (!isBrandPool).
- * - 3 questions from the brand-message pool (isBrandPool) for positions 8-10.
+ * Selects questions for a game session:
+ * - General pool and brand pool counts are configurable (default: 7 general + 3 brand).
+ * - Allocation is flexible and user-customizable.
  * - Never repeats a question in the same session.
  * - Shuffles answer options for each question.
  */
-export function selectSessionQuestions(bank: Question[]): Question[] {
+export function selectSessionQuestions(
+  bank: Question[],
+  config: SessionSelectionConfig = {}
+): Question[] {
+  const generalCount = config.generalCount !== undefined ? config.generalCount : 7;
+  const brandCount = config.brandCount !== undefined ? config.brandCount : 3;
+
   const generalPool = bank.filter((q) => !q.isBrandPool);
   const brandPool = bank.filter((q) => q.isBrandPool);
 
-  if (generalPool.length < 7) {
+  if (generalPool.length < generalCount) {
     throw new Error(
-      `Insufficient general questions: expected at least 7, got ${generalPool.length}`
+      `Insufficient general questions: expected at least ${generalCount}, got ${generalPool.length}`
     );
   }
 
-  if (brandPool.length < 3) {
+  if (brandPool.length < brandCount) {
     throw new Error(
-      `Insufficient brand-message questions: expected at least 3, got ${brandPool.length}`
+      `Insufficient brand-message questions: expected at least ${brandCount}, got ${brandPool.length}`
     );
   }
 
-  const selectedGeneral = shuffleArray(generalPool).slice(0, 7);
-  const selectedBrand = shuffleArray(brandPool).slice(0, 3);
+  const selectedGeneral = shuffleArray(generalPool).slice(0, generalCount);
+  const selectedBrand = shuffleArray(brandPool).slice(0, brandCount);
 
   const rawSessionQuestions = [...selectedGeneral, ...selectedBrand];
 

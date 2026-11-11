@@ -54,4 +54,18 @@ describe('Question Selection and Shuffling', () => {
     expect(shuffledCorrectOption).toBeDefined();
     expect(shuffledCorrectOption?.text).toBe(originalCorrectText);
   });
+
+  it('supports custom user-configured pool allocation (e.g. 5 general + 5 brand)', () => {
+    const sessionQuestions = selectSessionQuestions(QUESTIONS_BANK, {
+      generalCount: 5,
+      brandCount: 5,
+    });
+    expect(sessionQuestions).toHaveLength(10);
+
+    const generalQuestions = sessionQuestions.slice(0, 5);
+    const brandQuestions = sessionQuestions.slice(5, 10);
+
+    generalQuestions.forEach((q) => expect(q.isBrandPool).toBe(false));
+    brandQuestions.forEach((q) => expect(q.isBrandPool).toBe(true));
+  });
 });

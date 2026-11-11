@@ -3,6 +3,7 @@ import { calculateQuestionScore, calculateTotalScore } from '../lib/scoring';
 import { validateRegistration } from '../lib/validation';
 import { QUESTIONS_BANK } from '../data/questions';
 import { NUSANTARA_FUN_FACTS } from '../data/fun-facts';
+import { BRAND_TRANSITION_MESSAGES } from '../data/brand-messages';
 import type { GameStage, ParticipantRegistration, Question, QuestionResult } from '../lib/types';
 
 // ─────────────────────────────────────────
@@ -12,6 +13,7 @@ import type { GameStage, ParticipantRegistration, Question, QuestionResult } fro
 type GameState = {
   stage: GameStage;
   registration: ParticipantRegistration | null;
+  sessionId: string | null;
   sessionQuestions: Question[];
   currentQuestionIndex: number;
   results: QuestionResult[];
@@ -24,6 +26,7 @@ type GameState = {
 const state: GameState = {
   stage: 'age_gate',
   registration: null,
+  sessionId: null,
   sessionQuestions: [],
   currentQuestionIndex: 0,
   results: [],
@@ -174,6 +177,25 @@ function submitRegistration() {
     sessionStorage.setItem('sn_demo_registration', JSON.stringify(state.registration));
   } catch {}
 
+  // Sync to Cloudflare D1 (SQLite)
+  fetch('/api/register', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(state.registration),
+  })
+    .then((res) => (res.ok ? res.json() : null))
+    .then((data: any) => {
+      if (data?.sessionId) {
+        state.sessionId = data.sessionId;
+        try {
+          sessionStorage.setItem('sn_demo_session_id', data.sessionId);
+        } catch {}
+      }
+    })
+    .catch(() => {
+      // Graceful fallback for offline / purely static preview
+    });
+
   showStage('brand_intro');
   initBrandIntro();
 }
@@ -260,6 +282,23 @@ function initInstructions() {
 // Quiz
 // ─────────────────────────────────────────
 
+function getMaxAnswerDuration(): number {
+  try {
+    const params = new URLSearchParams(window.location.search);
+    const qTimer = params.get('timer') || params.get('duration');
+    if (qTimer && !isNaN(Number(qTimer))) {
+      const val = Number(qTimer);
+      if (val >= 3 && val <= 60) return val;
+    }
+    const sessionTimer = sessionStorage.getItem('sn_quiz_duration');
+    if (sessionTimer && !isNaN(Number(sessionTimer))) {
+      const val = Number(sessionTimer);
+      if (val >= 3 && val <= 60) return val;
+    }
+  } catch {}
+  return 10;
+}
+
 function startQuiz() {
   state.sessionQuestions = selectSessionQuestions(QUESTIONS_BANK);
   state.currentQuestionIndex = 0;
@@ -272,7 +311,8 @@ function loadQuestion(index: number) {
   const q = state.sessionQuestions[index];
   if (!q) return;
 
-  state.answerLocked = false;
+  // Lock answering during the 3-second reading/preparation interval
+  state.answerLocked = true;
   state.timerStartedAt = null;
 
   // Clear any stale timers
@@ -296,8 +336,8 @@ function loadQuestion(index: number) {
   const qText = $('quiz-question-text');
   if (qText) qText.textContent = q.text;
 
-  // Render answer options
-  renderOptions(q);
+  // Render answer options (initially in reading-phase locked state)
+  renderOptions(q, true);
 
   // Hide feedback panel
   const feedbackPanel = $('quiz-feedback-panel');
@@ -328,7 +368,7 @@ function loadQuestion(index: number) {
   }, 1000);
 }
 
-function renderOptions(q: Question) {
+function renderOptions(q: Question, isReadingPhase = false) {
   const container = $('quiz-options-list');
   if (!container) return;
 
@@ -337,11 +377,15 @@ function renderOptions(q: Question) {
   q.options.forEach((opt) => {
     const btn = document.createElement('button');
     btn.type = 'button';
-    btn.className = 'quiz-option-btn';
+    btn.className = `quiz-option-btn${isReadingPhase ? ' reading-phase' : ''}`;
     btn.setAttribute('data-option-id', opt.id);
     btn.setAttribute('role', 'radio');
     btn.setAttribute('aria-checked', 'false');
     btn.setAttribute('aria-label', `Pilihan ${opt.id}: ${opt.text}`);
+    if (isReadingPhase) {
+      btn.disabled = true;
+      btn.setAttribute('aria-disabled', 'true');
+    }
 
     const badge = document.createElement('span');
     badge.className = 'quiz-option-badge';
@@ -369,8 +413,20 @@ function startAnswerTimer(q: Question) {
   if (readingIndicator) readingIndicator.style.display = 'none';
   if (activeIndicator) activeIndicator.style.display = '';
 
+  // Unlock options for participant selection
+  state.answerLocked = false;
+  const container = $('quiz-options-list');
+  if (container) {
+    container.querySelectorAll<HTMLButtonElement>('.quiz-option-btn').forEach((btn) => {
+      btn.classList.remove('reading-phase');
+      btn.disabled = false;
+      btn.setAttribute('aria-disabled', 'false');
+    });
+  }
+
   state.timerStartedAt = performance.now();
-  let secondsLeft = 10;
+  const maxDuration = getMaxAnswerDuration();
+  let secondsLeft = maxDuration;
 
   if (countdownEl) countdownEl.textContent = `${secondsLeft}s`;
 
@@ -395,12 +451,13 @@ function handleAnswer(selectedOptionId: string, q: Question) {
   state.answerLocked = true;
   clearTimers();
 
+  const maxDuration = getMaxAnswerDuration();
   const elapsed = state.timerStartedAt
     ? (performance.now() - state.timerStartedAt) / 1000
-    : 10;
+    : maxDuration;
 
   const isCorrect = selectedOptionId === q.correctOptionId;
-  const points = calculateQuestionScore(isCorrect, elapsed, false);
+  const points = calculateQuestionScore(isCorrect, elapsed, false, maxDuration);
 
   const result: QuestionResult = {
     questionId: q.id,
@@ -412,18 +469,19 @@ function handleAnswer(selectedOptionId: string, q: Question) {
 
   state.results.push(result);
   lockOptions(selectedOptionId, q.correctOptionId, isCorrect);
-  showFeedback(isCorrect, false, points, q.explanation);
+  showFeedback(isCorrect, false, points, q.explanation, elapsed);
 }
 
 function handleTimeout(q: Question) {
   if (state.answerLocked) return;
   state.answerLocked = true;
 
+  const maxDuration = getMaxAnswerDuration();
   const result: QuestionResult = {
     questionId: q.id,
     selectedOptionId: null,
     isCorrect: false,
-    elapsedSeconds: 10,
+    elapsedSeconds: maxDuration,
     pointsEarned: 0,
   };
 
@@ -452,7 +510,13 @@ function lockOptions(selectedId: string | null, correctId: string, isCorrect: bo
   $('timer-active-indicator')?.classList.remove('urgent');
 }
 
-function showFeedback(isCorrect: boolean, isTimeout: boolean, points: number, explanation: string) {
+function showFeedback(
+  isCorrect: boolean,
+  isTimeout: boolean,
+  points: number,
+  explanation: string,
+  elapsedSeconds?: number
+) {
   const panel = $('quiz-feedback-panel');
   const iconBox = $('feedback-icon');
   const title = $('feedback-title');
@@ -467,19 +531,19 @@ function showFeedback(isCorrect: boolean, isTimeout: boolean, points: number, ex
     iconBox.innerHTML = `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#ff8a80" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>`;
     title.textContent = 'Waktu Habis!';
     title.style.color = '#ff8a80';
-    scoreGain.textContent = '+ 0 poin';
+    scoreGain.textContent = '+0 poin (Waktu menjawab habis)';
     scoreGain.style.color = '#ff8a80';
   } else if (isCorrect) {
     iconBox.innerHTML = `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#6ee7b7" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="9 12 11 14 15 10"/></svg>`;
     title.textContent = 'Jawaban Benar!';
     title.style.color = '#6ee7b7';
-    scoreGain.textContent = `+ ${points} poin`;
+    scoreGain.textContent = `+${points} poin (Menjawab di detik ke-${points})`;
     scoreGain.style.color = '#6ee7b7';
   } else {
     iconBox.innerHTML = `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#ff8a80" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>`;
     title.textContent = 'Jawaban Belum Tepat';
     title.style.color = '#ff8a80';
-    scoreGain.textContent = '+ 0 poin';
+    scoreGain.textContent = '+0 poin';
     scoreGain.style.color = '#ff8a80';
   }
 
@@ -508,10 +572,9 @@ function showFeedback(isCorrect: boolean, isTimeout: boolean, points: number, ex
   nextBtn.replaceWith(newBtn);
   newBtn.addEventListener('click', () => {
     if (isLast) {
-      showTransition();
+      showFinalTransition();
     } else {
-      state.currentQuestionIndex += 1;
-      loadQuestion(state.currentQuestionIndex);
+      showQuestionTransition(state.currentQuestionIndex + 1);
     }
   });
 
@@ -532,25 +595,113 @@ function clearTimers() {
 }
 
 // ─────────────────────────────────────────
-// Transition / Loading (fun facts)
+// Inter-Question Transition (Loading + Pesan Brand + Tombol Lanjut)
 // ─────────────────────────────────────────
 
-function showTransition() {
+function showQuestionTransition(nextQuestionIndex: number) {
+  clearTimers();
   showStage('transition');
 
-  const randomFact = NUSANTARA_FUN_FACTS[Math.floor(Math.random() * NUSANTARA_FUN_FACTS.length)];
-  const originEl = $('fact-origin');
-  const titleEl = $('fact-title');
-  const textEl = $('fact-text');
+  // Cek apakah soal saat ini atau soal berikutnya memiliki custom brandMessage dari Bank Soal
+  const currentQ = state.sessionQuestions[state.currentQuestionIndex];
+  const nextQ = state.sessionQuestions[nextQuestionIndex];
+  const customMsg =
+    (currentQ?.brandMessage?.title && currentQ?.brandMessage?.message ? currentQ.brandMessage : null) ||
+    (nextQ?.brandMessage?.title && nextQ?.brandMessage?.message ? nextQ.brandMessage : null);
 
-  if (originEl) originEl.textContent = randomFact.origin;
-  if (titleEl) titleEl.textContent = randomFact.title;
-  if (textEl) textEl.textContent = randomFact.fact;
+  const brandMsg =
+    customMsg ||
+    BRAND_TRANSITION_MESSAGES[(nextQuestionIndex - 1) % BRAND_TRANSITION_MESSAGES.length] ||
+    BRAND_TRANSITION_MESSAGES[0];
 
-  // After 2.5 s, go to result
-  setTimeout(() => {
-    showResult();
-  }, 2500);
+  const badgeEl = $('transition-badge');
+  const titleEl = $('transition-title');
+  const subEl = $('transition-sub');
+  const pillarEl = $('bm-pillar');
+  const msgTitleEl = $('bm-title');
+  const msgTextEl = $('bm-text');
+  const nextBtn = $('btn-transition-next');
+
+  if (badgeEl) badgeEl.textContent = `Menuju Pertanyaan ${nextQuestionIndex + 1} dari 10`;
+  if (titleEl) titleEl.textContent = `Memuat Pertanyaan ${nextQuestionIndex + 1}...`;
+  if (subEl) subEl.textContent = 'Sembari bersiap, resapi dedikasi di balik rasa Surya Nusantara';
+
+  if (pillarEl) pillarEl.textContent = brandMsg.pillar;
+  if (msgTitleEl) msgTitleEl.textContent = brandMsg.title;
+  if (msgTextEl) msgTextEl.textContent = brandMsg.message;
+
+  if (nextBtn) {
+    const freshBtn = nextBtn.cloneNode(true) as HTMLButtonElement;
+    const freshLabel = freshBtn.querySelector('#btn-transition-next-label') as HTMLElement | null;
+    if (freshLabel) {
+      freshLabel.textContent = `Lanjut ke Pertanyaan ${nextQuestionIndex + 1}`;
+    }
+    nextBtn.replaceWith(freshBtn);
+
+    freshBtn.addEventListener('click', () => {
+      state.currentQuestionIndex = nextQuestionIndex;
+      showStage('quiz');
+      loadQuestion(state.currentQuestionIndex);
+    });
+
+    freshBtn.focus({ preventScroll: false });
+  }
+}
+
+// ─────────────────────────────────────────
+// Final Transition (Loading + Pesan Penutup + Tombol Lanjut)
+// ─────────────────────────────────────────
+
+function showFinalTransition() {
+  clearTimers();
+  showStage('transition');
+
+  const badgeEl = $('transition-badge');
+  const titleEl = $('transition-title');
+  const subEl = $('transition-sub');
+  const pillarEl = $('bm-pillar');
+  const msgTitleEl = $('bm-title');
+  const msgTextEl = $('bm-text');
+  const nextBtn = $('btn-transition-next');
+
+  if (badgeEl) badgeEl.textContent = 'Kuis Selesai • Menghitung Skor';
+  if (titleEl) titleEl.textContent = 'Menghitung Hasil Anda...';
+  if (subEl) subEl.textContent = 'Sebuah dedikasi rasa untuk penikmat cita rasa mantap sejati';
+
+  const brandMsg =
+    BRAND_TRANSITION_MESSAGES[BRAND_TRANSITION_MESSAGES.length - 1] || BRAND_TRANSITION_MESSAGES[0];
+  if (pillarEl) pillarEl.textContent = brandMsg.pillar;
+  if (msgTitleEl) msgTitleEl.textContent = brandMsg.title;
+  if (msgTextEl) msgTextEl.textContent = brandMsg.message;
+
+  let autoTimer: ReturnType<typeof setTimeout> | null = null;
+
+  if (nextBtn) {
+    const freshBtn = nextBtn.cloneNode(true) as HTMLButtonElement;
+    const freshLabel = freshBtn.querySelector('#btn-transition-next-label') as HTMLElement | null;
+    if (freshLabel) {
+      freshLabel.textContent = 'Lihat Hasil Akhir';
+    }
+    nextBtn.replaceWith(freshBtn);
+
+    const proceedToResult = () => {
+      if (autoTimer) {
+        clearTimeout(autoTimer);
+        autoTimer = null;
+      }
+      showResult();
+    };
+
+    freshBtn.addEventListener('click', proceedToResult);
+    freshBtn.focus({ preventScroll: false });
+
+    // Otomatis lanjut setelah 3.5 detik jika tidak diklik langsung
+    autoTimer = setTimeout(proceedToResult, 3500);
+  } else {
+    setTimeout(() => {
+      showResult();
+    }, 2500);
+  }
 }
 
 // ─────────────────────────────────────────
@@ -590,6 +741,30 @@ function showResult() {
 
   // Breakdown list
   renderBreakdown();
+
+  // Sync answers & score to Cloudflare D1 (SQLite)
+  const activeSessionId =
+    state.sessionId ||
+    (function () {
+      try {
+        return sessionStorage.getItem('sn_demo_session_id');
+      } catch {
+        return null;
+      }
+    })();
+
+  if (activeSessionId && state.results.length > 0) {
+    fetch('/api/submit-quiz', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        sessionId: activeSessionId,
+        results: state.results,
+      }),
+    }).catch(() => {
+      // Graceful degradation
+    });
+  }
 
   // Play again
   const playAgainBtn = $('btn-play-again');
@@ -647,6 +822,7 @@ function resetGame() {
   clearTimers();
   state.stage = 'age_gate';
   state.registration = null;
+  state.sessionId = null;
   state.sessionQuestions = [];
   state.currentQuestionIndex = 0;
   state.results = [];
@@ -658,7 +834,10 @@ function resetGame() {
     r.checked = false;
   });
 
-  try { sessionStorage.removeItem('sn_demo_registration'); } catch {}
+  try {
+    sessionStorage.removeItem('sn_demo_registration');
+    sessionStorage.removeItem('sn_demo_session_id');
+  } catch {}
 
   showStage('age_gate');
 }

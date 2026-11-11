@@ -26,7 +26,7 @@
 
   /* Semantic UI Surfaces & Colors */
   --bg-app: #1e110a;
-  --bg-gradient: radial-gradient(circle at 50% 15%, #3d2315 0%, #1a0e08 85%);
+  --bg-gradient: linear-gradient(rgba(26, 14, 8, 0.72), rgba(20, 11, 6, 0.82)), url('/assets/bg_desktop.png');
   
   --surface-card: #341e12;
   --surface-subtle: #422818;
@@ -75,11 +75,12 @@
   --space-12: 48px;
   --space-16: 64px;
 
-  /* Sizing & Radius */
+  /* Sizing & Radius (Sharp, Rectilinear & Elegant) */
   --content-max-width: 560px;
-  --radius-card: 16px;
-  --radius-button: 10px;
-  --radius-input: 10px;
+  --radius-card: 0px;
+  --radius-button: 0px;
+  --radius-input: 0px;
+  --radius-chip: 0px;
 }
 
 /* Reset & Base Styles */
@@ -93,6 +94,10 @@ html, body {
   min-height: 100%;
   background-color: var(--bg-app);
   background-image: var(--bg-gradient);
+  background-position: center top;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
   color: var(--text-main);
   font-family: var(--font-body);
   font-size: 16px;
@@ -111,6 +116,132 @@ html, body {
 :focus-visible {
   outline: 2px solid var(--color-gold-300);
   outline-offset: 2px;
+}
+
+/* =========================================================
+   STAGE CARD - RADIANT CIRCULATING GOLD BORDER BEAM
+   Cahaya bersinar mengelilingi kotak outline emas
+   ========================================================= */
+.stage-card {
+  position: relative;
+  background: var(--surface-card);
+  border: 1px solid rgba(196, 154, 69, 0.3);
+  border-radius: var(--radius-card);
+  padding: var(--space-6);
+  box-shadow: var(--card-shadow);
+  animation: fadeIn 0.3s ease;
+  overflow: hidden;
+}
+
+.stage-card::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 280%;
+  height: 280%;
+  transform: translate(-50%, -50%) rotate(0deg);
+  transform-origin: center center;
+  background: conic-gradient(
+    from 0deg,
+    rgba(196, 154, 69, 0.25) 0deg,
+    rgba(196, 154, 69, 0.25) 60deg,
+    rgba(196, 154, 69, 0.6) 75deg,
+    rgba(255, 230, 160, 0.95) 86deg,
+    #ffffff 90deg,
+    rgba(255, 230, 160, 0.95) 94deg,
+    rgba(196, 154, 69, 0.6) 105deg,
+    rgba(196, 154, 69, 0.25) 120deg,
+    rgba(196, 154, 69, 0.25) 360deg
+  );
+  animation: rotateLightBeam 16s linear infinite;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.stage-card::after {
+  content: '';
+  position: absolute;
+  inset: 2px;
+  background: var(--surface-card);
+  border-radius: var(--radius-card);
+  z-index: 1;
+  pointer-events: none;
+}
+
+.stage-card > * {
+  position: relative;
+  z-index: 2;
+}
+
+@keyframes rotateLightBeam {
+  0% {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  100% {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* =========================================================
+   PRIMARY BUTTON - GOLD WITH PERIODIC GLEAM / SHIME
+   ========================================================= */
+.btn-primary {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, #e5bf65 0%, #c49a45 45%, #9e7523 100%) !important;
+  color: #1e110a !important;
+  border: 1px solid rgba(255, 235, 175, 0.5) !important;
+  box-shadow: 0 4px 16px rgba(196, 154, 69, 0.35);
+}
+
+.btn-primary::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -120%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.2) 30%,
+    rgba(255, 255, 255, 0.8) 50%,
+    rgba(255, 255, 255, 0.2) 70%,
+    transparent 100%
+  );
+  transform: skewX(-25deg);
+  animation: goldButtonShine 3.5s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes goldButtonShine {
+  0%, 60% {
+    left: -120%;
+    opacity: 0;
+  }
+  65% {
+    opacity: 1;
+  }
+  85% {
+    left: 160%;
+    opacity: 1;
+  }
+  86%, 100% {
+    left: 160%;
+    opacity: 0;
+  }
 }
 
 /* Reduced motion preference */

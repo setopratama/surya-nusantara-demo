@@ -3,38 +3,53 @@
 
 <section id="stage-transition" class="stage-card" style="display: none;" aria-labelledby="transition-title">
   <div class="card-body">
+    <!-- Step / Progress Badge -->
+    <div id="transition-badge" class="transition-badge">
+      Menuju Pertanyaan Berikutnya
+    </div>
+
+    <!-- Spinner Ring -->
     <div class="loader-ring" aria-hidden="true">
       <div class="ring-track"></div>
       <div class="ring-fill"></div>
     </div>
 
-    <h2 id="transition-title" class="transition-heading">Menghitung Hasil Anda...</h2>
-    <p class="transition-sub">Sementara itu, tahukah kamu tentang kekayaan Nusantara?</p>
+    <!-- Title & Subtitle -->
+    <h2 id="transition-title" class="transition-heading">Memuat Pertanyaan...</h2>
+    <p id="transition-sub" class="transition-sub">Sembari bersiap, resapi dedikasi di balik rasa Surya Nusantara</p>
 
-    <div id="fun-fact-box" class="fun-fact-card" aria-live="polite">
-      <div class="fact-icon" aria-hidden="true">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <circle cx="12" cy="12" r="10"></circle>
-          <path d="M12 16v-4M12 8h.01"></path>
-        </svg>
+    <!-- Brand Message Card -->
+    <div id="brand-message-box" class="brand-message-card" aria-live="polite">
+      <div class="bm-header">
+        <span id="bm-pillar" class="bm-pillar">Dedikasi Di Balik Rasa</span>
+        <span class="bm-tag">Surya Nusantara</span>
       </div>
-      <div>
-        <p id="fact-origin" class="fact-origin"></p>
-        <h3 id="fact-title" class="fact-title"></h3>
-        <p id="fact-text" class="fact-text"></p>
+      <div class="bm-content">
+        <div class="bm-icon" aria-hidden="true">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+          </svg>
+        </div>
+        <div class="bm-text-group">
+          <h3 id="bm-title" class="bm-title">Keahlian di Balik Rasa Mantap</h3>
+          <p id="bm-text" class="bm-text">Memuat pesan dedikasi rasa...</p>
+        </div>
       </div>
     </div>
+
+    <!-- Tombol Lanjut -->
+    <button id="btn-transition-next" class="btn-primary" type="button">
+      <span id="btn-transition-next-label">Lanjut ke Pertanyaan Berikutnya</span>
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <line x1="5" y1="12" x2="19" y2="12"></line>
+        <polyline points="12 5 19 12 12 19"></polyline>
+      </svg>
+    </button>
   </div>
 </section>
 
 <style>
   .stage-card {
-    background: var(--surface-card);
-    border: 1.5px solid var(--border-card);
-    border-radius: var(--radius-card);
-    padding: var(--space-6);
-    box-shadow: var(--card-shadow);
-    animation: fadeIn 0.3s ease;
     text-align: center;
   }
 
@@ -45,11 +60,26 @@
     gap: var(--space-4);
   }
 
+  /* ── Badge ── */
+  .transition-badge {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-accent);
+    background: rgba(196, 154, 69, 0.12);
+    border: 1px solid rgba(196, 154, 69, 0.35);
+    padding: 4px 12px;
+    border-radius: 9999px;
+  }
+
   /* ── Spinner ── */
   .loader-ring {
     position: relative;
-    width: 72px;
-    height: 72px;
+    width: 64px;
+    height: 64px;
+    margin: var(--space-1) 0;
   }
 
   .ring-track,
@@ -57,7 +87,7 @@
     position: absolute;
     inset: 0;
     border-radius: 50%;
-    border: 5px solid transparent;
+    border: 4px solid transparent;
   }
 
   .ring-track {
@@ -72,7 +102,7 @@
 
   .transition-heading {
     font-family: var(--font-display);
-    font-size: 1.6rem;
+    font-size: 1.55rem;
     color: var(--text-display);
     line-height: 1.2;
     letter-spacing: -0.01em;
@@ -82,49 +112,89 @@
     font-size: 0.9rem;
     color: var(--text-muted);
     margin-top: -var(--space-2);
+    max-width: 380px;
+    line-height: 1.5;
   }
 
-  /* ── Fun Fact Card ── */
-  .fun-fact-card {
+  /* ── Brand Message Card ── */
+  .brand-message-card {
     display: flex;
-    align-items: flex-start;
+    flex-direction: column;
     gap: var(--space-3);
     text-align: left;
-    background: var(--surface-subtle);
-    border: 1.5px solid var(--border-subtle);
-    border-radius: var(--radius-input);
-    padding: var(--space-4);
-    max-width: 100%;
+    background: linear-gradient(145deg, rgba(38, 28, 20, 0.85), rgba(24, 18, 14, 0.95));
+    border: 1.5px solid rgba(196, 154, 69, 0.3);
+    border-radius: var(--radius-card);
+    padding: var(--space-4) var(--space-5);
+    width: 100%;
+    max-width: 440px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
     animation: fadeIn 0.4s ease;
   }
 
-  .fact-icon {
-    color: var(--color-gold-500);
-    flex-shrink: 0;
-    margin-top: 2px;
+  .bm-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-2);
+    border-bottom: 1px solid rgba(196, 154, 69, 0.2);
+    padding-bottom: 6px;
   }
 
-  .fact-origin {
+  .bm-pillar {
     font-size: 0.72rem;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.08em;
     color: var(--text-accent);
-    margin-bottom: 2px;
   }
 
-  .fact-title {
+  .bm-tag {
+    font-size: 0.68rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    background: rgba(255, 255, 255, 0.06);
+    padding: 2px 8px;
+    border-radius: 4px;
+  }
+
+  .bm-content {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-3);
+  }
+
+  .bm-icon {
+    color: var(--color-gold-500);
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .bm-text-group {
+    flex: 1;
+  }
+
+  .bm-title {
     font-family: var(--font-display);
     font-size: 1.05rem;
     font-weight: 700;
     color: var(--text-display);
-    margin-bottom: var(--space-2);
+    margin-bottom: 4px;
+    line-height: 1.3;
   }
 
-  .fact-text {
+  .bm-text {
     font-size: 0.88rem;
     color: var(--text-main);
-    line-height: 1.5;
+    line-height: 1.55;
+  }
+
+  /* ── Action Button ── */
+  #btn-transition-next {
+    margin-top: var(--space-2);
+    width: 100%;
+    max-width: 440px;
+    justify-content: center;
   }
 
   @keyframes spin { to { transform: rotate(360deg); } }

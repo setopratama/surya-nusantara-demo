@@ -23,6 +23,11 @@ export const QUESTIONS_BANK: Question[] = [
     explanation: 'Abu vulkanik dari gugusan gunung berapi aktif di Nusantara memperkaya tanah dengan unsur hara mikro yang memberikan cita rasa unik pada tanaman perkebunan.',
     category: 'heritage',
     isBrandPool: false,
+    brandMessage: {
+      pillar: 'Warisan & Asal Usul',
+      title: 'Kekayaan Tanah Vulkanik',
+      message: 'Tanah vulkanik Nusantara yang subur dan kaya mineral alami melahirkan daun tembakau berkarakter kuat dan beraroma khas.',
+    },
   },
   {
     id: 'gen-02',
@@ -37,6 +42,11 @@ export const QUESTIONS_BANK: Question[] = [
     explanation: 'Keahlian para perajin Nusantara bertumpu pada ketelitian tangan, kesabaran, serta dedikasi dalam setiap tahapan proses.',
     category: 'craftsmanship',
     isBrandPool: false,
+    brandMessage: {
+      pillar: 'Sentuhan Tangan Terampil',
+      title: 'Ketelitian Perajin Nusantara',
+      message: 'Ketelitian dan kesabaran para perajin Nusantara menjaga kesempurnaan mutu yang diwariskan turun-temurun.',
+    },
   },
   {
     id: 'gen-03',
@@ -68,7 +78,7 @@ export const QUESTIONS_BANK: Question[] = [
   },
   {
     id: 'gen-05',
-    text: 'Karakteristik penting apa yang dinilai seorang ahli racik (blender) dalam menentukan mutu rajangan daun?',
+    text: 'Karakteristik penting apa yang dinilai seorang peracik ahli dalam menentukan mutu rajangan daun?',
     options: [
       { id: 'A', text: 'Konsistensi ketebalan dan kelembapan rajangan' },
       { id: 'B', text: 'Warna kemasan luar daun' },

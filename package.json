@@ -1,5 +1,5 @@
 {
-  "name": "surya-nusantara-quiz",
+  "name": "surya-nusantara",
   "type": "module",
   "version": "0.1.0",
   "private": true,
@@ -8,13 +8,24 @@
     "start": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "test": "bun test"
+    "test": "bun test",
+    "pages:dev": "wrangler pages dev dist",
+    "pages:deploy": "wrangler pages deploy dist",
+    "deploy": "bun run build && wrangler pages deploy dist",
+    "d1:init:local": "wrangler d1 execute surya-nusantara-d1 --local --file=./schema.sql",
+    "d1:init:remote": "wrangler d1 execute surya-nusantara-d1 --remote --file=./schema.sql",
+    "db:generate": "drizzle-kit generate"
   },
   "dependencies": {
-    "astro": "^5.4.2"
+    "astro": "^5.4.2",
+    "drizzle-orm": "^0.45.4",
+    "hono": "^4.13.17"
   },
   "devDependencies": {
+    "@cloudflare/workers-types": "^5.20261109.1",
     "@types/node": "^22.13.9",
-    "typescript": "^5.8.2"
+    "drizzle-kit": "^0.31.11",
+    "typescript": "^5.8.2",
+    "wrangler": "^4.158.0"
   }
 }

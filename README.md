@@ -7,11 +7,13 @@ Demo interaktif berbasis web untuk pengalaman kuis kampanye **"Dedikasi Di Balik
 ## 🛠️ Tech Stack
 
 - **Package Manager & Runtime:** [Bun](https://bun.sh/) (v1.4+)
-- **Frontend Framework:** [Astro](https://astro.build/) (v5.x, Static output)
+- **Frontend Framework:** [Astro](https://astro.build/) (v5.x, Static output + Dashboard `/dashboard`)
+- **Backend Framework:** [Hono](https://hono.dev/) (`hono/cloudflare-pages` di `functions/api/[[route]].ts`)
+- **ORM & Database:** [Drizzle ORM](https://orm.drizzle.team/) + Cloudflare D1 (Serverless SQLite)
 - **Bahasa:** TypeScript (Strict mode)
 - **Styling:** CSS bertema *Modern Nusantara Craftsmanship* (Brown `#28170F`, Gold `#C49A45`, Cream `#FAF7F0`)
 - **Interaktivitas:** Vanilla TypeScript island controller (`src/scripts/game-controller.ts`)
-- **Deployment Target:** Cloudflare Pages (Static Output)
+- **Deployment Target:** Cloudflare Pages (`https://surya-nusantara.pages.dev`)
 
 ---
 
@@ -41,6 +43,23 @@ Hasil build akan berada di direktori `dist/`.
 
 Demo ini menggunakan output statis Astro yang sangat optimal untuk Cloudflare Pages:
 
+### Opsi A: Deploy Langsung via Wrangler CLI
+
+Pastikan Anda sudah login ke akun Cloudflare di peramban/terminal Anda (`bun x wrangler login`).
+
+```bash
+# 1. Preview simulasi lokal Cloudflare Pages runtime
+bun run pages:dev
+
+# 2. Build dan deploy langsung ke Cloudflare Pages
+bun run deploy
+```
+
+Wrangler akan otomatis menggunakan konfigurasi pada `wrangler.jsonc` (project name: `surya-nusantara`, output: `./dist`), dan aplikasi akan ter-deploy ke **`https://surya-nusantara.pages.dev`**.
+
+### Opsi B: Git Integration (Dashboard Cloudflare Pages)
+
+Jika repo terhubung langsung ke Git di dashboard Cloudflare:
 1. **Framework Preset:** `None` / `Astro`
 2. **Build Command:** `bun run build`
 3. **Build Output Directory:** `dist`
@@ -82,6 +101,34 @@ Demo ini menggunakan output statis Astro yang sangat optimal untuk Cloudflare Pa
    - Rincian performa per pertanyaan (S1–S10).
    - Tombol **Main Lagi** (mengacak 10 soal baru dan mereset sesi).
    - Tombol **Kunjungi Surya Nusantara** (placeholder redirect).
+
+---
+
+## 🗄️ Database Cloudflare D1 (SQLite)
+
+Project ini dilengkapi integrasi **Cloudflare D1 (Serverless SQLite)** untuk mencatat data peserta dan performa kuis secara otomatis:
+
+### Tabel Database (`schema.sql`):
+1. `participants`: Menyimpan data diri peserta (ID, nama/username, rentang usia, konfirmasi 21+, kota domisili, pekerjaan, preferensi merek, timestamp).
+2. `quiz_sessions`: Menyimpan sesi permainan kuis (ID sesi, ID peserta, total skor, status selesai, waktu mulai & selesai).
+3. `quiz_answers`: Menyimpan rincian 10 jawaban per sesi (ID pertanyaan, opsi yang dipilih, benar/salah, detik menjawab, perolehan poin).
+
+### API Endpoints (Cloudflare Pages Functions):
+- `POST /api/register` : Menerima data pendaftaran dan membuat sesi baru di D1.
+- `POST /api/submit-quiz` : Menyimpan 10 rincian jawaban dan memperbarui skor akhir sesi di D1.
+- `GET /api/stats` : Mengambil agregasi metrik (total peserta, rata-rata skor, distribusi nilai, kota peserta teratas).
+
+### Perintah Manajemen D1:
+```bash
+# 1. Inisialisasi skema tabel di D1 lokal
+bun run d1:init:local
+
+# 2. Buat database D1 di Cloudflare (remote)
+bun x wrangler d1 create surya-nusantara-d1
+
+# 3. Jalankan skema ke database D1 di Cloudflare (remote)
+bun run d1:init:remote
+```
 
 ---
 

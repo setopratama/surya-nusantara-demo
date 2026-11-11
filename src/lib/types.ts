@@ -14,6 +14,12 @@ export interface AnswerOption {
   text: string;
 }
 
+export interface QuestionBrandMessage {
+  pillar: string;
+  title: string;
+  message: string;
+}
+
 export interface Question {
   id: string;
   text: string;
@@ -22,6 +28,7 @@ export interface Question {
   explanation: string;
   category: 'craftsmanship' | 'heritage' | 'process' | 'brand_message';
   isBrandPool: boolean; // false for questions 1-7, true for questions 8-10
+  brandMessage?: QuestionBrandMessage;
 }
 
 export interface QuestionResult {

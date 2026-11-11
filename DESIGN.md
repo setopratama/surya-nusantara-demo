@@ -63,15 +63,18 @@ Use: - Deep brown surfaces as the visual anchor. - Gold as a restrained
 highlight for emphasis and progress. - Cream or warm ivory for readable
 content surfaces. - Warm reddish-brown as a limited accent for selected
 feedback or emphasis. - Subtle tonal gradients, fine borders, and
-restrained shadows. - Photography or campaign imagery focused on skilled
-hands, tools, process, and experienced working adults, where approved
-campaign assets are available.
+restrained shadows. - Sharp, rectilinear geometry and clean architectural
+lines (0px to max 2px micro-corners) that reflect precision woodworking,
+joinery, and tailored luxury. - Photography or campaign imagery focused
+on skilled hands, tools, process, and experienced working adults, where
+approved campaign assets are available.
 
-Avoid: - Overuse of batik, ethnic patterns, or decorative cultural
-motifs. - Busy textures behind text. - Excessive glow, bevels, metallic
-effects, or ornamental frames. - Cartoonish game graphics, childish
-badges, or casino-like visual effects. - Visual effects that make the
-quiz slower or harder to read.
+Avoid: - Rounded corners, bubbly cards, or pill-shaped buttons which feel
+casual and detract from mature elegance. - Overuse of batik, ethnic
+patterns, or decorative cultural motifs. - Busy textures behind text. -
+Excessive glow, bevels, metallic effects, or ornamental frames. -
+Cartoonish game graphics, childish badges, or casino-like visual effects.
+- Visual effects that make the quiz slower or harder to read.
 
 ### 2.2 Mood and tone
 
@@ -239,8 +242,11 @@ on very narrow screens. - Tablet page gutter: 32px. - Desktop page
 gutter: 40px. - Main content max-width: 560px for quiz/form flows. -
 Wider intro or result composition: max-width 960px. - Button minimum
 height: 48px. - Answer option minimum height: 56px. - Touch target: at
-least 44 × 44px. - Card radius: 12--16px. - Button radius: 10--12px. -
-Input radius: 10px. - Border width: 1px.
+least 44 × 44px. - Corner treatment: Sharp, rectilinear geometry (`0px`
+or subtle `2px` micro-radius). Strictly avoid rounded corners (`12--16px`)
+or pill shapes, which feel informal and diminish elegance. - Card radius:
+`0px` (sharp/crisp edge) to max `2px`. - Button radius: `0px` to max `2px`.
+- Input radius: `0px` to max `2px`. - Border width: `1px` to `1.5px` crisp lines.
 
 ### 3.4 Elevation and surface treatment
 
@@ -512,12 +518,14 @@ States: - Default - Pressed - Focus-visible - Disabled - Loading
 
 Rules: - Minimum 48px height. - Clear label; avoid icon-only primary
 actions. - Keep disabled state visibly disabled and programmatically
-disabled. - Provide visible keyboard focus.
+disabled. - Provide visible keyboard focus. - Sharp rectangular geometry
+(0px to max 2px); strictly no pill-shaped or heavy rounded buttons.
 
 ### 7.2 Form controls
 
 -   Labels always visible.
 -   Input height: 48--56px.
+-   Sharp rectangular input fields (0px to max 2px radius) with crisp borders.
 -   Error message placed directly below the field.
 -   Focus state uses a clear border/ring.
 -   Search dropdown supports typed filtering, arrow-key navigation,
@@ -528,6 +536,7 @@ disabled. - Provide visible keyboard focus.
 
 -   Full-width option button on mobile.
 -   Minimum height 56px.
+-   Sharp architectural block silhouette (0px to max 2px radius) with crisp gold border framing.
 -   Clear selected state.
 -   Distinct focus-visible state.
 -   After submission, lock all options.
@@ -536,7 +545,7 @@ disabled. - Provide visible keyboard focus.
 ### 7.4 Progress indicator
 
 -   Show current question and total question count.
--   Use a simple track and gold progress fill.
+-   Use a sharp, straight linear track and gold progress fill without rounded endcaps.
 -   Include a textual equivalent for assistive technology.
 -   Do not communicate progress using color alone.
 

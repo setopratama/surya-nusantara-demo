@@ -59,17 +59,18 @@ is the product reference. Preserve these requirements:
     skipped after the first 5 seconds.
 6.  Show a brand-message / key-visual introduction before the quiz.
 7.  Each game session contains **10 questions** from a bank of **40**:
-    -   Questions 1--7: randomly selected from the question bank.
-    -   Questions 8--10: must relate to the brand message or the content
-        shown at the beginning.
-8.  Each question has a **10-second answer timer**. The brief also
+    -   Alokasi pertanyaan bersifat fleksibel dan dapat dikonfigurasi oleh pengguna/klien (misalnya default 7 pertanyaan umum + 3 pertanyaan brand, atau rasio kombinasi bebas lainnya yang disesuaikan kebutuhan kampanye tanpa harus menjadi rumus kaku).
+    -   Soal brand message tetap disediakan untuk menguji ingatan atas video dan narasi kampanye yang ditampilkan di awal.
+8.  Each question has a **10-second answer timer** (durasi maksimal dapat dikonfigurasi melalui dashboard). The brief also
     specifies a **3-second reading/preparation interval before the timer
-    starts**.
-9.  Correct answers receive points based on response time. Incorrect
-    answers receive 0 points and show an explanation. Timeout receives 0
-    points.
-10. After the quiz, show a loading / transition state with local
-    Nusantara fun-fact placeholder content, then show the final score.
+    starts** (peserta diberikan jeda 3 detik untuk membaca pertanyaan sebelum countdown menjawab dimulai).
+9.  **Scoring Rules sesuai Brief:**
+    -   Semakin cepat peserta menjawab, semakin besar poin yang diperoleh (mengikuti sisa waktu countdown timer di layar saat menjawab: detik ke-10 = 10 poin, detik ke-7 = 7 poin, detik ke-1 = 1 poin).
+    -   Contoh eksplisit dalam brief: menjawab pada saat countdown timer menunjukkan detik ke-7 mendapatkan 7 poin.
+    -   Jawaban salah menerima 0 poin dan menampilkan penjelasan edukatif.
+    -   Timeout (kehabisan waktu) menerima 0 poin.
+    -   Maksimal poin per soal adalah 10 poin (total 10 pertanyaan = maksimal 100 poin).
+10. Di setiap pergantian butir soal (soal 1 ke 2, dst.), tampilkan layar transisi/loading dengan animasi spinner elegan, pesan brand (*brand message* narasi dedikasi rasa Surya Nusantara yang tematik dan variatif), serta tombol lanjut (*"Lanjut ke Pertanyaan Berikutnya"*). Setelah soal ke-10 selesai, tampilkan transisi kalkulasi skor akhir sebelum menampilkan *final score*.
 11. Capture/reporting requirements in the brief include participant
     data, domicile/city, play date and time (timestamp), final score,
     total participants, score distribution, average score, participant
@@ -99,6 +100,12 @@ is the product reference. Preserve these requirements:
     deployment requires an approved age-verification approach, privacy
     review, consent/notice, secure backend validation, and
     data-retention rules.
+-   Do not expose technical hosting, infrastructure, or database details
+    (such as Cloudflare, Cloudflare Pages, D1, SQLite, or internal stack
+    names) on any client-facing web pages or dashboard views. The client
+    and participants should not see hosting/vendor identifiers in the UI;
+    keep all copy focused strictly on the brand narrative and clean
+    business/campaign metrics.
 
 ## Participant experience and routes
 
@@ -117,10 +124,8 @@ Suggested stages:
 6.  Instructions --- Explain 10 questions, 10 seconds each, and scoring.
 7.  Quiz --- Question, answer options, preparation countdown, answer
     timer, and progress.
-8.  Feedback --- Correct/incorrect state; show explanation for incorrect
-    answers.
-9.  Transition --- Brief loading state with approved or placeholder fun
-    fact.
+8.  Feedback --- Correct/incorrect/timeout state; perolehan skor dan narasi penjelasan edukatif.
+9.  Pergantian Soal / Transition --- Layar transisi di setiap pergantian pertanyaan dengan animasi loading, pesan brand kampanye (*brand message* Surya Nusantara), dan tombol lanjut; serta transisi kalkulasi skor akhir setelah butir soal terakhir.
 10. Result --- Final score, score summary, play-again/reset action, and
     optional configured redirect.
 
@@ -143,6 +148,49 @@ communicate correctness or errors.
 -   Clearly label any persistence as demo-only. Prefer not to persist
     registration data beyond the current browser session.
 
+## Question Bank vs. Quiz Builder & Distribution Architecture
+
+The system clearly separates question authoring from session composition and campaign distribution:
+
+-   **Question Bank:** Tempat menyimpan seluruh butir soal kuis (katalog bank soal, status `Active`/`Draft`, kategori/pilar, tingkat kesulitan, 4 opsi pilihan ganda, kunci jawaban benar, narasi penjelasan edukatif, dan konfigurasi pesan brand opsional untuk slide transisi antar soal).
+-   **Kategori Soal (Rancangan MVP Sederhana):** Entitas taksonomi untuk mengelompokkan topik butir soal tanpa *over-engineering* di sisi backend:
+    -   Hanya memiliki 3 field esensial:
+        1.  **Nama Kategori** (`name`, string, wajib) --- Contoh: *Warisan & Asal Usul*, *Keahlian & Ketelitian*, *Kearifan Petani Lokal*.
+        2.  **Deskripsi** (`description`, text, opsional) --- Catatan singkat cakupan materi/topik butir soal.
+        3.  **Status** (`status`, enum: `Active` / `Inactive`, default `Active`) --- Menentukan apakah kategori aktif digunakan saat kurasi soal.
+    -   *Prinsip Desain Backend (BE):* Tidak membebani skema kategori dengan slug manual (cukup ID internal BE), warna UI, rekomendasi kuota sesi, atau penempatan slot (Q1–Q7 vs Q8–Q10), karena urusan komposisi sesi sepenuhnya didelegasikan secara fleksibel ke **Quiz Builder & Distribusi Soal**.
+-   **Quiz Builder & Distribusi Soal:** Tempat mengatur bagaimana soal-soal tersebut dimainkan dan didistribusikan ke peserta. Sistem mendukung pembuatan **banyak distribusi kuis (*multiple distributions*)**, di mana setiap distribusi memiliki:
+    -   **QR Code Unik & URL Akses:** Tautan dan QR code khusus untuk melacak titik masuk (entry point) per event, booth offline, roadshow, atau channel kampanye yang berbeda-beda.
+    -   **Waktu Berlaku Distribusi (*Validity Period / Active Window*):** Pengaturan tanggal dan jam mulai (*start date/time*) serta tanggal dan jam berakhir (*end date/time*), memungkinkan admin membuat banyak distribusi dengan waktu aktivasi yang beragam dan terjadwal.
+    -   **Status Distribusi:** `Draft`, `Scheduled`, `Active`, `Expired`, atau `Archived`.
+
+### Flow Pembuatan Quiz & Distribusi Soal (8 Langkah)
+
+1.  **Create New Quiz:**
+    Admin memasukkan metadata quiz: nama quiz, nama campaign, deskripsi/tujuan, dan status awal.
+2.  **Pilih Sumber Soal:**
+    Sistem mengambil butir-butir soal dari **Question Bank** yang berstatus `Active`.
+3.  **Tentukan Jumlah Soal per Set:**
+    Menentukan total pertanyaan dalam satu sesi kuis (default sesuai brief: **10 pertanyaan**, dapat disesuaikan).
+4.  **Atur Random Question (Pool Umum):**
+    Posisi 1–7 (atau rentang yang ditentukan) dipilih secara acak. Admin dapat memilih dan menyaring kumpulan soal mana dari bank soal yang akan diikutsertakan dalam alokasi acak ini.
+5.  **Atur Mandatory Question (Pool Khusus Brand Message / Konten Nusantara):**
+    Posisi 8–10 (atau slot yang ditentukan) wajib menggunakan soal terkait *brand message* atau konten video/narasi kampanye. Di-setup langsung di flow pembuatan quiz dengan memilih soal mana yang mau digunakan.
+6.  **Atur Timer dan Scoring:**
+    -   *Preparation countdown (jeda membaca)*: 3 detik sebelum timer menjawab berjalan agar peserta dapat membaca pertanyaan secara saksama.
+    -   *Answer duration (durasi maksimal menjawab)*: 10 detik per pertanyaan (dapat diatur / dikonfigurasi melalui dashboard admin).
+    -   *Maximum score*: 10 poin per soal (maksimal 100 poin total untuk 10 pertanyaan).
+    -   *Scoring model (sesuai brief)*: Semakin cepat peserta menjawab, semakin besar poin yang diperoleh sesuai nilai detik pada countdown timer di layar saat menjawab (detik 10 = 10 poin, detik 7 = 7 poin, detik 1 = 1 poin).
+    -   *Wrong answer*: 0 poin (menampilkan penjelasan edukatif).
+    -   *Timeout*: 0 poin jika peserta tidak memilih jawaban hingga durasi 10 detik habis.
+7.  **Atur Feedback, Transisi Antar Soal, dan Hasil:**
+    -   Jawaban salah atau waktu habis memunculkan penjelasan (*explanation*) edukatif.
+    -   Di setiap pergantian soal (soal 1 ke 2, dst.), tampilkan layar transisi loading yang memuat *brand message* (nilai dedikasi rasa) dan tombol lanjut sebelum memulai jeda membaca soal berikutnya.
+    -   Setelah sesi berakhir, tampilkan transisi loading kalkulasi skor lalu *final score*.
+8.  **Preview dan Publish:**
+    -   Admin mencoba simulasi 10 soal sebelum quiz dapat digunakan oleh peserta.
+    -   Setelah di-publish, sistem otomatis menghasilkan **QR Code unik**, URL distribusi, dan menetapkan jendela waktu berlaku distribusi kuis.
+
 ## Quiz logic
 
 Represent questions as typed data, not hard-coded markup. Each question
@@ -155,13 +203,12 @@ should include:
 -   Correct option ID
 -   Explanation for an incorrect answer
 -   Category / pillar
--   Whether it is eligible for the random first-seven pool or reserved
-    for the final-three brand-message pool
+-   Whether it belongs to the general bank pool or the brand-message pool
+-   Brand message (opsional: pilar, judul, dan narasi pesan brand yang ditampilkan pada slide transisi saat soal ini dimainkan)
 
 Selection rules:
 
--   Select 7 unique questions randomly from the eligible general bank.
--   Select 3 questions from the brand-message pool for positions 8--10.
+-   Select unique questions according to user configuration (default: 7 general + 3 brand message, or customizable by the user/admin without rigid constraints).
 -   Never repeat a question in the same session.
 -   Shuffle answer-option order per question while preserving the
     correct option mapping.
@@ -171,41 +218,47 @@ Selection rules:
 
 Timer rules:
 
--   Show the 3-second preparation interval before starting each
-    10-second answer timer.
--   Lock answer selection immediately after a choice or timeout.
--   A question can be answered only once.
--   On timeout, record an unanswered result with 0 points and continue.
--   Prevent double submission and stale timer callbacks when moving
-    between questions.
--   Keep timer behavior consistent when the browser tab loses focus; do
-    not silently grant extra time. For the demo, use a monotonic client
-    timer and document that it is not tamper-proof.
+-   **Jeda Membaca 3 Detik:** Tampilkan *preparation/reading countdown* selama 3 detik sebelum timer menjawab dimulai agar peserta memiliki jeda yang cukup untuk membaca teks pertanyaan dan opsi jawaban dengan tenang.
+-   **Durasi Menjawab Maksimal 10 Detik:** Setiap butir pertanyaan memiliki durasi maksimal 10 detik. Parameter durasi ini dapat diatur dan dikonfigurasi melalui antarmuka dashboard.
+-   Kunci opsi jawaban segera setelah peserta memilih opsi atau ketika timer 10 detik habis (*timeout*).
+-   Setiap pertanyaan hanya dapat dijawab satu kali (*no multiple submissions*).
+-   Pada saat *timeout*, sistem mencatat jawaban tidak terjawab dengan perolehan 0 poin, lalu mengarahkan ke feedback/soal berikutnya.
+-   Cegah double submission dan pastikan callback timer dibersihkan (*cleared*) saat beralih antar pertanyaan.
+-   Pertahankan konsistensi timer meskipun tab browser beralih fokus (gunakan timer berbasis waktu sistem monotonik).
 
-## Scoring rules
+Pergantian Soal & Layar Transisi Brand:
 
-The brief states that each question is worth up to 10 points, that
-faster answers earn more points, that an answer at the 7th second earns
-7 points, and that wrong answers earn 0 points. It gives a maximum of
-100 points across 10 questions.
+-   Setelah peserta melihat feedback jawaban pada butir pertanyaan saat ini dan menekan tombol lanjut, sistem tidak langsung meloncat tiba-tiba ke butir soal berikutnya.
+-   Sistem menampilkan layar jeda/transisi (*Question Transition Stage*) yang memuat:
+    1.  **Animasi Loading Ring:** Indikator visual loading bernuansa emas elegan khas Surya Nusantara.
+    2.  **Pesan Brand (*Brand Message*):** Narasi tematik yang mengomunikasikan pilar dedikasi, keahlian peracik, cengkih Maluku pilihan, tanah vulkanik Nusantara, dan komitmen rasa mantap. Pesan berganti secara dinamis pada tiap pergantian soal.
+    3.  **Tombol Lanjut:** Tombol aksi (*"Lanjut ke Pertanyaan [X]"*) yang memberikan kendali penuh kepada peserta untuk melangkah ke pertanyaan berikutnya saat sudah siap.
+-   Setelah peserta menekan tombol lanjut di layar transisi, sistem beralih ke soal berikutnya dan memulai jeda membaca 3 detik sebelum timer menjawab aktif.
+-   Pada butir soal ke-10 (terakhir), transisi menampilkan kalkulasi skor akhir dengan pesan penutup dan tombol *"Lihat Hasil Akhir"*.
 
-Implement the demo scoring as follows, matching the brief's example:
+## Scoring rules & Frontend Game Specification
 
--   Correct answer: points equal the elapsed answer-second bucket, from
-    1 to 10.
--   Incorrect answer: 0 points.
--   Timeout: 0 points.
--   Maximum possible score: 100.
+Sesuai ketentuan eksplisit dalam brief:
 
-Use the answer timer's elapsed time to determine the bucket. Clamp valid
-correct-answer scores to 1--10. Keep the scoring function isolated and
-unit-testable.
+-   **Ketentuan Perolehan Poin:**
+    -   **Semakin cepat peserta menjawab, semakin besar poin yang diperoleh** (mengikuti nilai detik pada countdown timer saat tombol jawaban ditekan).
+    -   **Contoh perhitungan dalam brief:** Menjawab dengan benar pada saat countdown menunjukkan detik ke-7 menghasilkan **7 poin**.
+    -   Tabel kalkulasi skor jawaban benar (pada durasi maksimal 10 detik):
+        -   Countdown detik ke-10 (elapsed 0.00 – 1.00s / saat waktu 10 detik mulai): **10 poin**
+        -   Countdown detik ke-9 (elapsed 1.01 – 2.00s): **9 poin**
+        -   Countdown detik ke-8 (elapsed 2.01 – 3.00s): **8 poin**
+        -   Countdown detik ke-7 (elapsed 3.01 – 4.00s): **7 poin**
+        -   Countdown detik ke-6 (elapsed 4.01 – 5.00s): **6 poin**
+        -   Countdown detik ke-5 (elapsed 5.01 – 6.00s): **5 poin**
+        -   Countdown detik ke-4 (elapsed 6.01 – 7.00s): **4 poin**
+        -   Countdown detik ke-3 (elapsed 7.01 – 8.00s): **3 poin**
+        -   Countdown detik ke-2 (elapsed 8.01 – 9.00s): **2 poin**
+        -   Countdown detik ke-1 (elapsed 9.01 – 10.00s): **1 poin**
+-   **Jawaban Salah:** Mendapatkan **0 poin** dan menampilkan penjelasan edukatif (*educational explanation*).
+-   **Timeout (Waktu Habis):** Mendapatkan **0 poin**.
+-   **Skor Maksimal Total:** 10 butir pertanyaan × maksimal 10 poin = **100 poin**.
 
-**Scoring clarification for client approval:** The brief's wording can
-be interpreted differently from a conventional countdown bonus (where
-more remaining time means more points). The explicit example says an
-answer at second 7 receives 7 points. Follow that example for the demo
-and flag the scoring interpretation for confirmation before production.
+Kalkulasi skor menggunakan sisa waktu (`maxDuration - elapsedSeconds`) yang dibulatkan ke atas (`Math.ceil`), sehingga angka poin selalu selaras dengan angka countdown detik di antarmuka kuis. Jaga fungsi penilaian (`calculateQuestionScore`) tetap terisolasi dan teruji unit test secara ketat.
 
 ## Visual direction
 
@@ -330,10 +383,10 @@ The demo is ready for client review when:
     fields.
 -   Brand content and the brand-message step appear before the quiz.
 -   The content skip control appears only after 5 seconds.
--   A session contains exactly 10 questions with the required 7 + 3
-    selection structure.
--   Each question has a 3-second preparation interval and a 10-second
-    answer timer.
+-   A session contains 10 questions with flexible, user-configurable pool allocation (default: 7 general + 3 brand message, customizable).
+-   Each question has a 3-second reading/preparation interval and a 10-second answer timer (durasi maksimal dapat diatur dari dashboard).
+-   Di setiap pergantian butir soal kuis terdapat layar transisi loading yang memuat animasi spinner, pesan brand Surya Nusantara, dan tombol lanjut ke soal berikutnya.
+-   Scoring mengikuti ketentuan brief: semakin cepat menjawab semakin besar poin yang diperoleh sesuai countdown timer (countdown 10s: detik ke-10 = 10 poin, detik ke-7 = 7 poin, detik ke-1 = 1 poin); jawaban salah atau timeout = 0 poin.
 -   Correct, incorrect, and timeout paths work and cannot submit twice.
 -   The final score is calculated from the 10 question results and
     cannot exceed 100.

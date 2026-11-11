@@ -22,7 +22,7 @@
 
     <div id="quiz-timer-container" class="timer-badge">
       <div id="timer-reading-indicator" class="timer-reading-badge" style="display: none;" aria-live="polite">
-        <span>Baca:</span>
+        <span class="timer-reading-label">Jeda Membaca:</span>
         <strong id="reading-countdown" class="tabular-nums">3s</strong>
       </div>
       <div id="timer-active-indicator" class="timer-active-badge" aria-live="off">
@@ -68,12 +68,7 @@
 
 <style>
   .stage-card {
-    background: var(--surface-card);
-    border: 1.5px solid var(--border-card);
-    border-radius: var(--radius-card);
     padding: var(--space-5) var(--space-4);
-    box-shadow: var(--card-shadow);
-    animation: fadeIn 0.3s ease;
   }
 
   /* ── Top bar ── */
@@ -102,9 +97,9 @@
 
   .progress-bar-track {
     width: 100%;
-    height: 7px;
+    height: 6px;
     background: var(--surface-subtle);
-    border-radius: 9999px;
+    border-radius: 0px;
     overflow: hidden;
     border: 1px solid var(--border-subtle);
   }
@@ -112,7 +107,7 @@
   .progress-bar-fill {
     height: 100%;
     background: linear-gradient(90deg, #c49a45 0%, #ffd885 100%);
-    border-radius: 9999px;
+    border-radius: 0px;
     transition: width 0.3s ease;
   }
 
@@ -125,7 +120,7 @@
     align-items: center;
     gap: 6px;
     font-size: 0.85rem;
-    border-radius: 9999px;
+    border-radius: 0px;
     padding: 4px 12px;
     font-weight: 700;
   }
@@ -166,7 +161,7 @@
     text-transform: uppercase;
     letter-spacing: 0.05em;
     padding: 2px 8px;
-    border-radius: 4px;
+    border-radius: 0px;
     margin-bottom: var(--space-2);
   }
 
@@ -219,6 +214,13 @@
     cursor: not-allowed;
   }
 
+  :global(.quiz-option-btn.reading-phase) {
+    opacity: 0.88;
+    cursor: wait !important;
+    pointer-events: none;
+    border-style: dashed;
+  }
+
   :global(.quiz-option-badge) {
     width: 34px;
     height: 34px;
@@ -228,7 +230,7 @@
     font-family: var(--font-mono);
     font-weight: 700;
     font-size: 0.95rem;
-    border-radius: 8px;
+    border-radius: 0px;
     display: flex;
     align-items: center;
     justify-content: center;
