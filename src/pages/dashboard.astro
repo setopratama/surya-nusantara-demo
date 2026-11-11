@@ -2890,12 +2890,12 @@ const DEMO_RECENT_PARTICIPANTS = [
             .map((c: any) => {
               const pct = c.percentage !== undefined ? c.percentage : Math.round((c.count / maxCityCount) * 100);
               return `
-                <div class="city-row">
-                  <span class="city-name">${c.domicile}</span>
-                  <div class="city-track">
-                    <div class="city-fill" style="width: ${pct}%;"></div>
+                <div class="city-row" style="display: flex; align-items: center; gap: 0.75rem; font-size: 0.78rem;">
+                  <span class="city-name" style="width: 110px; font-weight: 500; color: #334155; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${c.domicile}</span>
+                  <div class="city-track" style="flex: 1; height: 8px; background: #f1f5f9; border-radius: 4px; overflow: hidden;">
+                    <div class="city-fill" style="width: ${pct}%; height: 100%; background: #967126; border-radius: 4px;"></div>
                   </div>
-                  <span class="city-count tabular-nums">${c.count} orang</span>
+                  <span class="city-count tabular-nums" style="font-family: var(--font-mono); font-size: 0.75rem; color: #64748b; width: 60px; text-align: right;">${c.count} orang</span>
                 </div>
               `;
             })
@@ -3741,14 +3741,14 @@ const DEMO_RECENT_PARTICIPANTS = [
     gap: 0.65rem;
   }
 
-  .city-row {
+  .city-row, :global(.city-row) {
     display: flex;
     align-items: center;
     gap: 0.75rem;
     font-size: 0.78rem;
   }
 
-  .city-name {
+  .city-name, :global(.city-name) {
     width: 110px;
     font-weight: 500;
     color: var(--dash-text-body);
@@ -3757,7 +3757,7 @@ const DEMO_RECENT_PARTICIPANTS = [
     text-overflow: ellipsis;
   }
 
-  .city-track {
+  .city-track, :global(.city-track) {
     flex: 1;
     height: 8px;
     background: #f1f5f9;
@@ -3765,13 +3765,13 @@ const DEMO_RECENT_PARTICIPANTS = [
     overflow: hidden;
   }
 
-  .city-fill {
+  .city-fill, :global(.city-fill) {
     height: 100%;
     background: var(--dash-gold);
     border-radius: 4px;
   }
 
-  .city-count {
+  .city-count, :global(.city-count) {
     font-family: var(--font-mono);
     font-size: 0.75rem;
     color: var(--dash-text-muted);
@@ -3846,7 +3846,7 @@ const DEMO_RECENT_PARTICIPANTS = [
   }
 
   /* Chips */
-  .age-chip, .brand-chip {
+  .age-chip, :global(.age-chip), .brand-chip, :global(.brand-chip) {
     display: inline-block;
     padding: 2px 7px;
     font-size: 0.72rem;
@@ -3856,7 +3856,7 @@ const DEMO_RECENT_PARTICIPANTS = [
     color: var(--dash-text-body);
   }
 
-  .score-pill {
+  .score-pill, :global(.score-pill) {
     display: inline-block;
     padding: 2px 8px;
     font-family: var(--font-mono);
@@ -3866,10 +3866,10 @@ const DEMO_RECENT_PARTICIPANTS = [
     border: 1px solid transparent;
   }
 
-  .score-high { background: #fdfbf7; color: #967126; border-color: #f2dfab; }
-  .score-mid { background: #fefce8; color: #a16207; border-color: #fef08a; }
-  .score-fair { background: #f1f5f9; color: #475569; border-color: #e2e8f0; }
-  .score-low { background: #f8fafc; color: #94a3b8; border-color: #e2e8f0; }
+  .score-high, :global(.score-high) { background: #fdfbf7; color: #967126; border-color: #f2dfab; }
+  .score-mid, :global(.score-mid) { background: #fefce8; color: #a16207; border-color: #fef08a; }
+  .score-fair, :global(.score-fair) { background: #f1f5f9; color: #475569; border-color: #e2e8f0; }
+  .score-low, :global(.score-low) { background: #f8fafc; color: #94a3b8; border-color: #e2e8f0; }
 
   /* =========================================================
      TAB 2: BANK SOAL STYLING
