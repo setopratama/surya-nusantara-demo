@@ -614,19 +614,25 @@ const DEMO_RECENT_PARTICIPANTS = [
                     <h2 class="table-title">Daftar Aktivitas Peserta Terkini</h2>
                     <span class="table-subtitle">Data langsung tersinkronisasi dari sesi kuis interaktif</span>
                   </div>
+                  <a href="/dashboard/peserta" class="btn-table-more">
+                    <span>Kelola Semua Peserta</span>
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <polyline points="9 18 15 12 9 6"></polyline>
+                    </svg>
+                  </a>
                 </div>
 
                 <div class="table-responsive">
-                  <table class="dash-table">
+                  <table class="dash-table participants-table">
                     <thead>
                       <tr>
-                        <th>Waktu</th>
-                        <th>Nama Peserta</th>
-                        <th>Usia</th>
-                        <th>Kota Domisili</th>
-                        <th>Pekerjaan</th>
-                        <th>Merek Saat Ini</th>
-                        <th>Skor Kuis</th>
+                        <th style="width: 180px;">Waktu</th>
+                        <th style="min-width: 140px;">Nama Peserta</th>
+                        <th style="width: 120px; text-align: center;">Usia</th>
+                        <th style="width: 130px;">Kota Domisili</th>
+                        <th style="min-width: 180px;">Pekerjaan</th>
+                        <th style="width: 150px; text-align: center;">Merek Saat Ini</th>
+                        <th style="width: 120px; text-align: center;">Skor Kuis</th>
                       </tr>
                     </thead>
                     <tbody id="participants-tbody">
@@ -635,13 +641,13 @@ const DEMO_RECENT_PARTICIPANTS = [
                           r.score >= 80 ? 'score-high' : r.score >= 60 ? 'score-mid' : r.score >= 40 ? 'score-fair' : 'score-low';
                         return (
                           <tr>
-                            <td class="tabular-nums text-muted">{r.time}</td>
-                            <td class="font-bold text-display">{r.name}</td>
-                            <td><span class="age-chip">{r.ageBand}</span></td>
-                            <td>{r.domicile}</td>
-                            <td class="text-muted text-sm">{r.occupation}</td>
-                            <td><span class="brand-chip">{r.currentBrand}</span></td>
-                            <td><span class={`score-pill ${scoreClass}`}>{r.score} poin</span></td>
+                            <td class="col-time">{r.time}</td>
+                            <td class="col-name">{r.name}</td>
+                            <td style="text-align: center;"><span class="age-chip">{r.ageBand}</span></td>
+                            <td style="white-space: nowrap;">{r.domicile}</td>
+                            <td class="col-occupation">{r.occupation}</td>
+                            <td style="text-align: center;"><span class="brand-chip">{r.currentBrand}</span></td>
+                            <td style="text-align: center;"><span class={`score-pill ${scoreClass}`}>{r.score} poin</span></td>
                           </tr>
                         );
                       })}
@@ -2936,13 +2942,13 @@ const DEMO_RECENT_PARTICIPANTS = [
 
             return `
               <tr>
-                <td class="tabular-nums text-muted">${timeStr}</td>
-                <td class="font-bold text-display">${r.name}</td>
-                <td><span class="age-chip">${r.ageBand}</span></td>
-                <td>${r.domicile}</td>
-                <td class="text-muted text-sm">${r.occupation}</td>
-                <td><span class="brand-chip">${r.currentBrand}</span></td>
-                <td><span class="score-pill ${scoreBadgeClass}">${score} poin</span></td>
+                <td class="col-time">${timeStr}</td>
+                <td class="col-name">${r.name}</td>
+                <td style="text-align: center;"><span class="age-chip">${r.ageBand}</span></td>
+                <td style="white-space: nowrap;">${r.domicile}</td>
+                <td class="col-occupation">${r.occupation}</td>
+                <td style="text-align: center;"><span class="brand-chip">${r.currentBrand}</span></td>
+                <td style="text-align: center;"><span class="score-pill ${scoreBadgeClass}">${score} poin</span></td>
               </tr>
             `;
           })
@@ -3792,6 +3798,29 @@ const DEMO_RECENT_PARTICIPANTS = [
     padding: 0.9rem 1.25rem;
     border-bottom: 1px solid var(--dash-border);
     background: #fafbfc;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .btn-table-more {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--dash-gold);
+    text-decoration: none;
+    padding: 4px 10px;
+    border-radius: var(--radius-sm);
+    background: #ffffff;
+    border: 1px solid var(--dash-border);
+    transition: all 0.15s ease;
+  }
+
+  .btn-table-more:hover {
+    background: var(--dash-gold-light);
+    border-color: var(--dash-gold-border);
   }
 
   .table-title {
@@ -3810,66 +3839,129 @@ const DEMO_RECENT_PARTICIPANTS = [
   }
 
   .table-responsive {
+    width: 100%;
     overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
   }
 
   .dash-table {
     width: 100%;
+    min-width: 860px;
     border-collapse: collapse;
     font-size: 0.8rem;
     text-align: left;
   }
 
-  .dash-table th {
+  .dash-table th,
+  :global(.dash-table th),
+  .dash-table thead th,
+  :global(.dash-table thead th) {
     padding: 10px 14px;
     background: #f8fafc;
     border-bottom: 1px solid var(--dash-border);
-    font-weight: 600;
+    font-weight: 700;
     color: var(--dash-text-muted);
     font-size: 0.7rem;
     text-transform: uppercase;
     letter-spacing: 0.05em;
+    vertical-align: middle;
+    white-space: nowrap;
   }
 
-  .dash-table td {
+  .dash-table td,
+  :global(.dash-table td),
+  :global(.dash-table tbody td) {
     padding: 11px 14px;
     border-bottom: 1px solid var(--dash-border-subtle);
     color: var(--dash-text-body);
+    vertical-align: middle;
+    font-size: 0.82rem;
+    background: #ffffff;
   }
 
-  .dash-table tr:last-child td {
+  .dash-table tr:last-child td,
+  :global(.dash-table tr:last-child td),
+  :global(.dash-table tbody tr:last-child td) {
     border-bottom: none;
   }
 
-  .dash-table tr:hover td {
-    background: #f8fafc;
+  .dash-table tr:hover td,
+  :global(.dash-table tr:hover td),
+  :global(.dash-table tbody tr:hover td) {
+    background-color: #fafbfc !important;
+  }
+
+  /* Specific column classes */
+  :global(.dash-table td.col-time),
+  .dash-table td.col-time {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--dash-text-muted);
+    white-space: nowrap;
+  }
+
+  :global(.dash-table td.col-name),
+  .dash-table td.col-name {
+    font-weight: 600;
+    color: var(--dash-text-main);
+    white-space: nowrap;
+  }
+
+  :global(.dash-table td.col-occupation),
+  .dash-table td.col-occupation {
+    font-size: 0.8rem;
+    color: var(--dash-text-muted);
   }
 
   /* Chips */
-  .age-chip, :global(.age-chip), .brand-chip, :global(.brand-chip) {
-    display: inline-block;
-    padding: 2px 7px;
-    font-size: 0.72rem;
-    border: 1px solid #e2e8f0;
-    border-radius: var(--radius-sm);
-    background: #f8fafc;
-    color: var(--dash-text-body);
-  }
-
-  .score-pill, :global(.score-pill) {
+  .age-chip,
+  :global(.age-chip) {
     display: inline-block;
     padding: 2px 8px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    border: 1px solid #e2e8f0;
+    border-radius: var(--radius-sm);
+    background: #f1f5f9;
+    color: #334155;
+    white-space: nowrap;
+  }
+
+  .brand-chip,
+  :global(.brand-chip) {
+    display: inline-block;
+    padding: 2px 8px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    border: 1px solid var(--dash-gold-border);
+    border-radius: var(--radius-sm);
+    background: var(--dash-gold-light);
+    color: var(--dash-gold);
+    white-space: nowrap;
+  }
+
+  .score-pill,
+  :global(.score-pill) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3px 10px;
     font-family: var(--font-mono);
     font-weight: 700;
     font-size: 0.76rem;
-    border-radius: var(--radius-sm);
+    border-radius: 9999px;
     border: 1px solid transparent;
+    white-space: nowrap;
   }
 
-  .score-high, :global(.score-high) { background: #fdfbf7; color: #967126; border-color: #f2dfab; }
-  .score-mid, :global(.score-mid) { background: #fefce8; color: #a16207; border-color: #fef08a; }
-  .score-fair, :global(.score-fair) { background: #f1f5f9; color: #475569; border-color: #e2e8f0; }
-  .score-low, :global(.score-low) { background: #f8fafc; color: #94a3b8; border-color: #e2e8f0; }
+  .score-high,
+  :global(.score-high) { background: #fef3c7; color: #92400e; border-color: #fde68a; }
+  .score-mid,
+  :global(.score-mid) { background: #ecfdf5; color: #065f46; border-color: #a7f3d0; }
+  .score-fair,
+  :global(.score-fair) { background: #f1f5f9; color: #475569; border-color: #cbd5e1; }
+  .score-low,
+  :global(.score-low) { background: #fef2f2; color: #991b1b; border-color: #fecaca; }
 
   /* =========================================================
      TAB 2: BANK SOAL STYLING
@@ -6059,23 +6151,23 @@ const DEMO_RECENT_PARTICIPANTS = [
   }
 
   /* Utility classes */
-  .text-xs { font-size: 0.75rem; line-height: 1.35; }
-  .text-sm { font-size: 0.825rem; line-height: 1.4; }
-  .text-muted { color: var(--dash-text-muted); }
-  .text-danger { color: #dc2626; }
-  .text-success { color: #16a34a; }
-  .text-warning { color: #d97706; }
-  .text-gold { color: var(--dash-gold); }
-  .font-mono { font-family: var(--font-mono); }
-  .font-bold { font-weight: 700; }
-  .tabular-nums { font-variant-numeric: tabular-nums; }
-  .truncate { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .max-w-xs { max-width: 260px; }
-  .mt-3 { margin-top: 0.75rem; }
-  .mt-4 { margin-top: 1rem; }
-  .mb-1 { margin-bottom: 0.25rem; }
-  .mb-2 { margin-bottom: 0.5rem; }
-  .block { display: block; }
+  .text-xs, :global(.text-xs) { font-size: 0.75rem; line-height: 1.35; }
+  .text-sm, :global(.text-sm) { font-size: 0.825rem; line-height: 1.4; }
+  .text-muted, :global(.text-muted) { color: var(--dash-text-muted); }
+  .text-danger, :global(.text-danger) { color: #dc2626; }
+  .text-success, :global(.text-success) { color: #16a34a; }
+  .text-warning, :global(.text-warning) { color: #d97706; }
+  .text-gold, :global(.text-gold) { color: var(--dash-gold); }
+  .font-mono, :global(.font-mono) { font-family: var(--font-mono); }
+  .font-bold, :global(.font-bold) { font-weight: 700; }
+  .tabular-nums, :global(.tabular-nums) { font-variant-numeric: tabular-nums; }
+  .truncate, :global(.truncate) { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .max-w-xs, :global(.max-w-xs) { max-width: 260px; }
+  .mt-3, :global(.mt-3) { margin-top: 0.75rem; }
+  .mt-4, :global(.mt-4) { margin-top: 1rem; }
+  .mb-1, :global(.mb-1) { margin-bottom: 0.25rem; }
+  .mb-2, :global(.mb-2) { margin-bottom: 0.5rem; }
+  .block, :global(.block) { display: block; }
 
   /* Responsive Adjustments */
   @media (max-width: 1024px) {
