@@ -295,6 +295,10 @@ motifs, or playful mechanics that could appeal to minors.
     safe placeholder default and explain how to replace it.
 -   Test the production build locally before declaring the Cloudflare
     demo ready.
+-   **Demo Lifecycle & Offline Maintenance Mode:**
+    -   Untuk menonaktifkan demo sementara tanpa menghapus project atau mengubah file source code di `src/`: deploy direktori `offline/` (`bunx wrangler pages deploy offline --project-name=surya-nusantara-demo`). Ini menampilkan layar penutup resmi yang elegan dan aman.
+    -   Untuk mengaktifkan kembali demo kuis secara penuh: `bun run build && bunx wrangler pages deploy dist --project-name=surya-nusantara-demo`.
+    -   Untuk menghapus project sepenuhnya dari Cloudflare Pages: `bunx wrangler pages project delete surya-nusantara-demo -y`.
 
 ## Quality requirements
 

@@ -13,7 +13,7 @@ Demo interaktif berbasis web untuk pengalaman kuis kampanye **"Dedikasi Di Balik
 - **Bahasa:** TypeScript (Strict mode)
 - **Styling:** CSS bertema *Modern Nusantara Craftsmanship* (Brown `#28170F`, Gold `#C49A45`, Cream `#FAF7F0`)
 - **Interaktivitas:** Vanilla TypeScript island controller (`src/scripts/game-controller.ts`)
-- **Deployment Target:** Cloudflare Pages (`https://surya-nusantara.pages.dev`)
+- **Deployment Target:** Cloudflare Pages (`https://surya-nusantara-demo.pages.dev`)
 
 ---
 
@@ -55,7 +55,7 @@ bun run pages:dev
 bun run deploy
 ```
 
-Wrangler akan otomatis menggunakan konfigurasi pada `wrangler.jsonc` (project name: `surya-nusantara`, output: `./dist`), dan aplikasi akan ter-deploy ke **`https://surya-nusantara.pages.dev`**.
+Wrangler akan otomatis menggunakan konfigurasi pada `wrangler.jsonc` (project name: `surya-nusantara-demo`, output: `./dist`), dan aplikasi akan ter-deploy ke **`https://surya-nusantara-demo.pages.dev`**.
 
 ### Opsi B: Git Integration (Dashboard Cloudflare Pages)
 
@@ -65,6 +65,27 @@ Jika repo terhubung langsung ke Git di dashboard Cloudflare:
 3. **Build Output Directory:** `dist`
 4. **Environment Variables:**
    - `BUN_VERSION`: `1.4.4` (atau versi terkini)
+
+### Opsi C: Manajemen Status Demo (Offline & Reaktivasi)
+
+1. **Menonaktifkan / Menampilkan Layar "Demo Telah Berakhir":**
+   Jika periode peninjauan klien telah selesai dan akses ingin ditutup tanpa mengubah file source code (`src/` tetap 100% utuh):
+   ```bash
+   bunx wrangler pages deploy offline --project-name=surya-nusantara-demo
+   ```
+   Folder `offline/` memuat file `index.html` dan `404.html` bertema elegan yang menginformasikan bahwa sesi peninjauan telah berakhir secara resmi.
+
+2. **Mengaktifkan Kembali Demo Kuis Secara Penuh:**
+   Kapan pun demo ingin dinyalakan kembali:
+   ```bash
+   bun run build && bunx wrangler pages deploy dist --project-name=surya-nusantara-demo
+   ```
+
+3. **Menghapus Project Sepenuhnya dari Cloudflare Pages:**
+   Jika ingin menghapus project secara permanen dari Cloudflare (URL langsung mengembalikan 404):
+   ```bash
+   bunx wrangler pages project delete surya-nusantara-demo -y
+   ```
 
 ---
 
